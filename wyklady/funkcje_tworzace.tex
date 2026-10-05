@@ -1,0 +1,352 @@
+\documentclass{lecture-kuznia}
+\usepackage{textcomp}
+
+\def\data{30.09.2025}
+\def\place{Poręba Wielka}
+\def\title{Funkcje tworzące}
+\def\group{Finaliści}
+\def\author{Autor: Stefan Świerczewski}
+\def\lecturer{Prowadzący: Stefan Świerczewski}
+
+\usepackage{xcolor}   % needed for background colors
+\usepackage{mdframed} % provides the mdframed environment
+
+\usepackage{comment}
+
+\ifshowsolutions
+  \mdfdefinestyle{solstyle}{%
+    backgroundcolor=gray!10,
+    linecolor=black!30,
+    innertopmargin=6pt,
+    innerbottommargin=6pt,
+    innerleftmargin=8pt,
+    innerrightmargin=8pt,
+    roundcorner=6pt
+  }
+  \newenvironment{solutionbox}{%
+    \begin{mdframed}[style=solstyle]\noindent\textbf{Rozwiązanie.}\par\smallskip
+  }{%
+    \end{mdframed}
+  }
+\else
+  \excludecomment{solutionbox}
+\fi
+
+
+\begin{document}
+\begin{center}{\Huge\textbf{\title}}\end{center}
+%\LARGE{
+	
+	\fontsize{12}{16}\selectfont
+		
+
+        \section{\Huge Wstęp}
+        Często rozwiązując zadania napotykamy ciąg postaci \(a_0, a_1, a_2 \ldots a_n, \ldots\) Nieraz trzeba wyliczyć \(k\)-ty wyraz bądź udowodnić, że wszystkie te elementy spełniają pewną zależność. Pracowanie na tych ciągach często jest żmudne, z pomocą przychodzą nam funkcje tworzące. Pozwalają nam one zapisać skomplikowane ciągi w postaci jednego obiektu na, którym możemy przeprowadzać najróżniejsze operacje.
+        Zdefiniujmy zatem nasz ciąg jako współczynniki następującej funkcji(możliwie nieskończony wielomian): 
+        \[f(x) = \sum_{k = 0}^{\infty}a_kx^k\]
+
+        Zazwyczaj nie musimy się przejmować zbieżnością tego szeregu, lecz przy niektórych specyficznych problemach pozwala to ciekawe wnioski.
+
+        W dalszej części wykładu będziemy oznaczać relację ciągu z jego funkcją tworzącą następująco:
+
+        \[\langle a_n \rangle_{n \in \mathbb{N}} \; \sim \; A(x)\]
+
+        Wyłuskiwanie współczynnika przy n-tej potędze będziemy oznaczać \([x^n]f(x) = a_n\)
+        
+        Wiemy już zatem jaki jest koncept funkcji tworzącej musimy do tego dołożyć kilka fajnych narzędzi i podstawowych funkcji.
+
+        Jak chcemy przedstawić ciąg złożony z samych jedynek możemy powołać się na fakt, że \(1+x+x^2+\ldots+x^n = \frac{1-x^{n+1}}{1-x}\), zatem gdy \(|x| < 1\) to przechodząc do nieskończoności nasz ciąg reprezentuje funkcja:
+
+        \[\sum_{k=0}^{\infty} x^k = \frac{1}{1-x}\]
+
+        Otrzymaliśmy jedną z najbardziej fundamentalnych funkcji, z której często się korzysta i wyprowadza nowe funkcje tworzące.
+
+        Częstym motywem który przetacza się w funkcjach tworzących są funkcję wymierne a w szczególności przydatna jest umiejętność rozdzielenia ich na ułamki proste.
+
+        
+        
+    \section{\Huge Ważne funkcje tworzące.}
+
+\[
+1, q, q^2, q^3, \ldots = \langle q^n \rangle \sim \frac{1}{1 - qx}, \quad \text{dla } q \in \mathbb{C};
+\]
+
+\[
+\binom{r}{0}, \binom{r}{1}, \binom{r}{2}, \binom{r}{3}, \ldots = \langle \binom{r}{n} \rangle \sim (1+x)^r, \quad \text{dla } r \in \mathbb{R};
+\]
+
+
+\[
+\binom{k}{k}, \binom{k+1}{k}, \binom{k+2}{k}, \ldots = \left\langle \binom{k+n}{k} \right\rangle \sim \frac{1}{(1-x)^{k+1}}, \quad \text{dla } k \in \mathbb{N};
+\]
+
+\[
+\binom{0}{k}, \binom{1}{k}, \binom{2}{k}, \ldots = \left\langle \binom{n}{k} \right\rangle \sim \frac{x^k}{(1-x)^{k+1}}, \quad \text{dla } k \in \mathbb{N};
+\]
+
+\[
+1, \tfrac{1}{2}, \tfrac{1}{3}, \tfrac{1}{4}, \ldots 
+= \left\langle \frac{1}{n+1} \right\rangle \sim \frac{1}{x} \ln \frac{1}{1-x};
+\]
+
+\[
+1, 1, \tfrac{1}{2}, \tfrac{1}{6}, \tfrac{1}{24}, \ldots 
+= \left\langle \frac{1}{n!} \right\rangle \sim e^x;
+\]
+
+\[
+\langle 0, 1, 1, 2, 3, 5, \ldots \rangle = \langle F_n \rangle \sim \frac{x}{1-x-x^2}.
+\]
+\begin{solutionbox}
+Rozważmy przykład liczb Fibonacciego i obliczmy funkcję tworzącą. Definiujemy
+\[
+F(x) = \sum_{n \geq 0} F_n x^n.
+\]
+
+Mamy
+\[
+\sum_{n \geq 1} F_{n+1} x^n
+= \sum_{n \geq 1} F_n x^n + \sum_{n \geq 1} F_{n-1} x^n.
+\]
+
+Stąd
+\[
+\frac{F(x) - x}{x} = F(x) + xF(x),
+\]
+a więc
+\[
+F(x) = \frac{x}{1 - x - x^2}.
+\]
+
+Możemy zapisać
+\[
+1 - x - x^2 = (1 - r_+ x)(1 - r_- x),
+\qquad r_\pm = \frac{1 \pm \sqrt{5}}{2}.
+\]
+
+Wobec tego
+\[
+\frac{x}{1 - x - x^2}
+= \frac{1}{r_+ - r_-} \left( \frac{1}{1 - r_+ x} - \frac{1}{1 - r_- x} \right).
+\]
+
+Ponieważ
+\[
+\frac{1}{1 - r x} = \sum_{n \geq 0} r^n x^n,
+\]
+otrzymujemy
+\[
+F(x) = \frac{1}{\sqrt{5}} \sum_{n \geq 0} \bigl( r_+^n - r_-^n \bigr) x^n.
+\]
+
+\end{solutionbox}
+
+    \textbf{Przydatne własności:}\\
+    \begin{enumerate}
+        \item Jeżeli $\langle a_n \rangle \sim A(x)$ oraz $\langle b_n \rangle \sim B(x)$, to dla dowolnych $\alpha, \beta \in \mathbb{C}$:
+\[
+\langle \alpha a_n + \beta b_n \rangle \sim \alpha A(x) + \beta B(x).
+\]
+\item Jeżeli $\langle a_n \rangle \sim A(x)$ oraz $\langle b_n \rangle \sim B(x)$, to
+\[
+\left\langle \sum_{k=0}^{n} a_k b_{n-k} \right\rangle \sim A(x) B(x).
+\]
+\item \([x^n]\{\, x^a f(x) \,\} \;=\; [x^{\,n-a}] f(x).\)
+\item \([\beta x^n] f(x) \;=\; \frac{1}{\beta}\,[x^n] f(x), 
+\qquad \beta \in \mathbb{R}\).
+    \end{enumerate} 
+    
+    
+  \section{\huge{Zadanka rozgrzewkowe}}
+
+	
+ 
+\begin{enumerate}[label=\textbf{Zad. \arabic*}]
+
+\item Znajdź liczbę $a_n$ sposobów, w jakie można rozmieścić $n$ dolarów przy użyciu monet o nominale 1 lub 2 złotowych. 
+
+\item Niech \(n\) i \(k\) będą liczbami całkowitymi, \(0\le k\le n\). Ile jest sposobów wyboru podzbioru dokładnie \(k\)-elementowego ze zbioru \(\{1,2,\dots,n\}\)? Wiemy, że odpowiedź to \(\binom{n}{k}\). Wyprowadźmy to korzystając z funkcji tworzących.
+
+\begin{solutionbox}
+Let \(f(n,k)\) be the number of \(k\)-element subsets of \(\{1,2,\dots,n\}\).
+Partition all \(k\)-subsets into two classes:
+\begin{itemize}
+  \item those that contain the element \(n\), and
+  \item those that do not contain \(n\).
+\end{itemize}
+If a \(k\)-subset contains \(n\), the remaining \(k-1\) elements must be chosen from \(\{1,\dots,n-1\}\), so there are \(f(n-1,k-1)\) such subsets. If a \(k\)-subset does not contain \(n\), then all \(k\) elements are chosen from \(\{1,\dots,n-1\}\), giving \(f(n-1,k)\) subsets. Hence the recurrence
+\[
+f(n,k)=f(n-1,k)+f(n-1,k-1)
+\]
+holds for \(0<k\le n\), with the obvious boundary conditions \(f(n,0)=1\) for all \(n\ge0\) and \(f(0,k)=0\) for \(k>0\).
+
+Define the ordinary generating function (in the variable \(x\)) for fixed \(n\):
+\[
+B_n(x)=\sum_{k\ge0} f(n,k)\,x^k.
+\]
+Using the recurrence and summing over \(k\ge1\) we obtain
+\[
+\sum_{k\ge1} f(n,k)x^k
+= \sum_{k\ge1} f(n-1,k)x^k + \sum_{k\ge1} f(n-1,k-1)x^k.
+\]
+The left-hand side equals \(B_n(x)-f(n,0)=B_n(x)-1\). The first sum on the right equals \(B_{n-1}(x)-1\), while the second sum equals \(xB_{n-1}(x)\). Therefore
+\[
+B_n(x)-1 = \bigl(B_{n-1}(x)-1\bigr) + xB_{n-1}(x).
+\]
+Rearranging yields the simple recurrence for the generating functions:
+\[
+B_n(x) = (1+x)\,B_{n-1}(x),\qquad B_0(x)=1.
+\]
+Solving this recurrence by iteration gives
+\[
+B_n(x)=(1+x)^n.
+\]
+
+Comparing coefficients of \(x^k\) in the binomial expansion
+\[
+(1+x)^n=\sum_{k=0}^n \binom{n}{k} x^k
+\]
+with the definition \(B_n(x)=\sum_{k\ge0} f(n,k)x^k\) we conclude
+\[
+f(n,k)=\binom{n}{k},
+\]
+as required.
+\end{solutionbox}
+
+\item Rozwiąż równania rekurencyjne
+\begin{enumerate}
+  \item[(a)] \[
+    a_n = 2a_{n-1} - a_{n-2}, \qquad a_0 = 0,\ a_1 = 1.
+  \]
+  \item[(b)] \[
+    b_n = 2b_{n-1} - b_{n-2} + 1, \qquad b_0 = 0,\ b_1 = 1.
+  \]
+  \item[(c)] \[
+    c_n = 4c_{n-1} - c_{n-2}, \qquad c_0 = 1,\ c_1 = 3.
+  \]
+  \item[(d)] \[
+    d_{n+2} = 5d_{n+1} - 6d_n - 4\cdot 2^{\,n+2}, \qquad d_0 = 1,\ d_1 = 5.
+  \]
+\end{enumerate}
+\item Wyznacz funkcje tworzące następujących ciągów:
+
+\begin{enumerate}
+    \item $\langle 1, 0, 1, 0, 1, 0, 1, 0, \dots \rangle$;
+    \item $\langle 0, -1, 2, -3, 4, -5, 6, -7, \dots \rangle$;
+    \item $\langle 0, 1, 0, 3, 0, 5, 0, 7, \dots \rangle$;
+    \item $\langle k, k-1, k-2, \dots, 2, 1, 0, -1, -2, \dots \rangle$, gdzie $k \in \mathbb{N}$.
+\end{enumerate}
+\section{\huge{Zadania}}
+\item Niech $n$ będzie dodatnią liczbą całkowitą. Znajdź liczbę wielomianów $P(x)$ mających współczynniki ze zbioru \({0, 1, 2, 3}\) takich, że $P(2) = n$.
+\begin{solutionbox}
+Niech \(a_n\) będzie odpowiedzią na zadanie. Zdefiniujmy funkcję tworzącą
+\[
+f(t) = \sum_{n=0}^{\infty} a_n t^n.
+\]
+
+Niech \(P(x) = \sum_{i=0}^{k} c_i x^i\), gdzie \(c_i \in \{0,1,2,3\}\). Zauważmy, że \(P(2) = n\) wtedy i tylko wtedy, gdy
+\[
+\sum_{i=0}^{k} c_i 2^i = n.
+\]
+
+Ponieważ \(t^n = \prod_{i=0}^{k} t^{2^i c_i}\) i \(2^i c_i \in \{0, 2^i, 2\cdot 2^i, 3\cdot 2^i\}\), funkcję \(f(t)\) można rozłożyć w postaci
+\[
+f(t) = \prod_{i=0}^{\infty} \left(1 + t^{2^i} + t^{2\cdot 2^i} + t^{3\cdot 2^i}\right)
+= \prod_{i=0}^{\infty} \frac{1 - t^{4 \cdot 2^i}}{1 - t^{2^i}}
+= \frac{1}{1-t} \cdot \frac{1}{1-t^2}.
+\]
+
+Rozwijając w szereg otrzymujemy
+\[
+\frac{1}{(1-t)(1-t^2)} = \frac{1}{2} \left( \frac{1}{(1-t)^2} + \frac{1}{1-t^2} \right)
+= \frac{1}{2} \sum_{k=0}^{\infty} k t^{k-1} + \sum_{k=0}^{\infty} t^{2k}
+= \sum_{n=0}^{\infty} \left\lfloor \frac{n}{2} \right\rfloor + 1 \, t^n.
+\]
+
+Stąd liczba takich wielomianów wynosi
+\[
+a_n = \left\lfloor \frac{n}{2} \right\rfloor + 1.
+\]
+
+\end{solutionbox}
+
+\item Niech \(p\) będzie nieparzystą liczbą pierwszą. Ile jest podzbiorów \(A\) zbioru 
+\(\{1, 2, \dots, 2p\}\) o \(p\) elementach, dla których suma elementów jest podzielna przez \(p\)?
+\begin{solutionbox}
+
+Niech $\omega$ będzie pierwotną $p$-tą pierwiastkiem jednostki. Wówczas
+\[
+\prod_{k=1}^{2p} (x - \omega^k) = (x^p - 1)^2 = x^{2p} - 2x^p + 1.
+\]
+
+Porównując współczynnik przy $x^p$, mamy
+\[
+2 = \sum_{\{k_1+k_2+\dots+k_p\}} \omega^{k_1 + k_2 + \dots + k_p} = \sum_{j=0}^{p-1} n_j \omega^j,
+\]
+gdzie pierwsza suma jest po wszystkich podzbiorach $\{k_1, k_2, \dots, k_p\}$ zbioru $\{1,2,\dots,2p\}$, a $n_j$ w drugiej sumie jest liczbą takich podzbiorów, dla których
+\[
+k_1 + k_2 + \dots + k_p \equiv j \pmod{p}.
+\]
+
+Zatem $\omega$ jest pierwiastkiem wielomianu
+\[
+G(x) = (n_0 - 2) + \sum_{j=1}^{p-1} n_j x^j,
+\]
+który jest wielomianem stopnia $p-1$. Przypomnijmy, że minimalny wielomian $\omega$ nad $\mathbb{Q}[x]$ jest
+\[
+F(x) = \sum_{j=0}^{p-1} x^j,
+\]
+również stopnia $p-1$. Ponieważ minimalne wielomiany są jednoznaczne do stałego współczynnika, $G(x)$ jest stałą wielokrotnością $F(x)$. To implikuje, że
+\[
+n_0 - 2 = n_1 = n_2 = \dots = n_{p-1}.
+\]
+
+Skoro $\sum_{j=0}^{p-1} n_j = \binom{2p}{p}$, to
+\[
+n_0 = \frac{1}{p} \binom{2p}{p} - 2 + 2 = \frac{1}{p} \binom{2p}{p}.
+\]
+\end{solutionbox}
+
+\section{\huge{Szczypta teorii}}
+
+Niech $\langle a_n \rangle_{n \in \mathbb{N}} \overset{e}{\sim} A_e(x)$ oznacza, że $A_e(x)$ jest wykładniczą funkcją tworzącą ciągu $\langle a_n \rangle$, czyli szeregiem formalnym określonym następująco:
+\[
+A_e(x) = \sum_{n \in \mathbb{N}} a_n \frac{x^n}{n!}.
+\]
+
+\textbf{(Splot dwumianowy)} Jeżeli 
+\[
+\langle a_n \rangle \overset{e}{\sim} A_e(x) \quad \text{oraz} \quad \langle b_n \rangle \overset{e}{\sim} B_e(x),
+\]
+to
+\[
+\sum_{k=0}^{n} \binom{n}{k} a_k b_{n-k} \overset{e}{\sim} A_e(x) B_e(x).
+\]
+
+\section{\huge{Zadania bardzo trudne}}
+\item Niech $n$ i $k$ będą liczbami całkowitymi dodatnimi, przy czym $k \ge n$ oraz $k - n$ jest liczbą parzystą. Rozważamy $2n$ lamp oznaczonych $1,2,\dots,2n$, z których każda może być w stanie włączonym lub wyłączonym. Początkowo wszystkie lampy są wyłączone. Rozważamy sekwencję kroków, w której w każdym kroku zmieniana jest jedna z lamp (z włączonego na wyłączoną lub z wyłączonej na włączoną).
+
+Niech $N$ oznacza liczbę takich sekwencji składających się z $k$ kroków, które prowadzą do stanu, w którym lampy $1$ do $n$ są wszystkie włączone, a lampy $n+1$ do $2n$ są wszystkie wyłączone.
+
+Niech $M$ oznacza liczbę takich sekwencji składających się z $k$ kroków, które prowadzą do stanu, w którym lampy $1$ do $n$ są wszystkie włączone, lampy $n+1$ do $2n$ są wszystkie wyłączone, a żadna z lamp $n+1$ do $2n$ nie była nigdy włączona.
+
+Wyznacz stosunek $\frac{N}{M}$.
+\begin{solutionbox}
+Niech
+\[
+	f(x)=\left(x+\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots\right)
+	\left(1+\frac{x^2}{2!}+\frac{x^4}{4!}+\cdots\right)
+	=\frac{\sinh(2x)}{2}.
+\]
+Wtedy $N=k!\,[x^k](f(x)^n)$. Z kolei dla $g(x)=\sinh(x)$ mamy
+$M=k!\,[x^k](g(x)^n)$. Stąd
+\[
+	\frac{N}{M}
+	=2^{-n}\frac{[x^k](\sinh(2x))^n}{[x^k](\sinh(x))^n}
+	=2^{-n}\cdot 2^k
+	=2^{k-n}.
+\]
+\end{solutionbox}
+
+\end{enumerate}
+\end{document}

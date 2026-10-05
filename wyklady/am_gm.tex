@@ -1,0 +1,1044 @@
+\documentclass{lecture-kuznia}
+
+\def\data{26.09.2026}
+\def\place{Poręba Wielka}
+\def\title{Od AM--GM do AM--HM i nie tylko}
+\def\group{Juniorzy}
+\def\author{Autor: Stefan Świerczewski}
+\def\lecturer{Prowadzący: Stefan Świerczewski}
+
+\begin{document}
+
+\begin{center}
+	{\LARGE\textbf{\title{}}}
+\end{center}
+
+\section{Teoria}
+
+\subsection{Cztery średnie}
+
+Dla dodatnich liczb $a_1,\dots,a_n$ definiujemy
+\[
+	A=\frac{a_1+\cdots+a_n}{n},\qquad
+	G=\sqrt[n]{a_1\cdots a_n},
+\]
+\[
+	H=\frac{n}{\frac1{a_1}+\cdots+\frac1{a_n}},\qquad
+	Q=\sqrt{\frac{a_1^2+\cdots+a_n^2}{n}}.
+\]
+
+Średnią $Q$ nazywamy \emph{średnią kwadratową}; spotyka się też oznaczenie
+$P_2$.
+
+Istnieje również szersza rodzina tzw.\ \emph{średnich potęgowych},
+obejmująca między innymi średnią harmoniczną, arytmetyczną i kwadratową.
+Nie będziemy tutaj rozwijać ich ogólnej teorii.
+
+Najważniejszy łańcuch ma postać
+\[
+	\boxed{Q\ge A\ge G\ge H}.
+\]
+
+Równość w którejkolwiek z tych nierówności zachodzi wtedy i tylko wtedy,
+gdy
+\[
+	a_1=a_2=\cdots=a_n.
+\]
+
+\subsection{Dlaczego \texorpdfstring{$Q\ge A$}{Q ≥ A}?}
+
+Mamy
+\[
+	n(a_1^2+\cdots+a_n^2)-(a_1+\cdots+a_n)^2
+	=
+	\sum_{1\le i<j\le n}(a_i-a_j)^2\ge0.
+\]
+
+Zatem
+\[
+	(a_1+\cdots+a_n)^2\le n(a_1^2+\cdots+a_n^2),
+\]
+czyli
+\[
+	\frac{a_1+\cdots+a_n}{n}
+	\le
+	\sqrt{\frac{a_1^2+\cdots+a_n^2}{n}}.
+\]
+
+\subsection{AM--GM}
+
+Dla $a,b>0$ mamy
+\[
+	\frac{a+b}{2}\ge \sqrt{ab},
+\]
+bo
+\[
+	(\sqrt a-\sqrt b)^2\ge0.
+\]
+
+W ogólności, dla $a_1,\dots,a_n>0$,
+\[
+	\frac{a_1+\cdots+a_n}{n}\ge \sqrt[n]{a_1\cdots a_n}.
+\]
+
+\begin{proof}
+	Najpierw udowodnimy pomocniczy fakt: jeśli
+	\[
+		a_1a_2\cdots a_n=1,
+	\]
+	to
+	\[
+		a_1+\cdots+a_n\ge n,
+	\]
+	przy czym równość zachodzi wtedy i tylko wtedy, gdy
+	\[
+		a_1=\cdots=a_n=1.
+	\]
+
+	Dowód przeprowadzimy indukcyjnie względem $n$.
+	Dla $n=1$ teza jest oczywista.
+
+	Załóżmy więc, że $n\ge2$ i że teza zachodzi dla $n-1$ liczb.
+	Bez straty ogólności możemy przyjąć, że
+	\[
+		a_1=\max\{a_1,\dots,a_n\}\ge1,
+		\qquad
+		a_2=\min\{a_1,\dots,a_n\}\le1.
+	\]
+
+	Wtedy
+	\[
+		a_1+a_2-a_1a_2-1
+		=
+		(a_1-1)(1-a_2)\ge0,
+	\]
+	czyli
+	\[
+		a_1+a_2-a_1a_2\ge1.
+	\]
+
+	Ponadto liczby
+	\[
+		a_1a_2,\ a_3,\dots,a_n
+	\]
+	mają iloczyn równy $1$, więc z założenia indukcyjnego
+	\[
+		a_1a_2+a_3+\cdots+a_n\ge n-1.
+	\]
+
+	Dodając obie nierówności, otrzymujemy
+	\[
+		a_1+a_2+\cdots+a_n\ge n.
+	\]
+
+	Jeśli zachodzi równość, to w szczególności
+	\[
+		(a_1-1)(1-a_2)=0.
+	\]
+
+	Stąd $a_1=1$ lub $a_2=1$. Ponieważ $a_1$ jest największą, a $a_2$
+	najmniejszą spośród liczb $a_i$, w obu przypadkach otrzymujemy
+	\[
+		a_1=\cdots=a_n=1.
+	\]
+
+	Teraz udowodnimy AM--GM. Niech
+	\[
+		g=\sqrt[n]{a_1a_2\cdots a_n}.
+	\]
+
+	Liczby
+	\[
+		\frac{a_1}{g},\frac{a_2}{g},\dots,\frac{a_n}{g}
+	\]
+	mają iloczyn równy $1$. Z udowodnionego wyżej faktu
+	\[
+		\frac{a_1}{g}+\frac{a_2}{g}+\cdots+\frac{a_n}{g}\ge n.
+	\]
+
+	Po pomnożeniu przez $g$ dostajemy
+	\[
+		a_1+a_2+\cdots+a_n\ge ng,
+	\]
+	czyli
+	\[
+		\frac{a_1+\cdots+a_n}{n}
+		\ge
+		\sqrt[n]{a_1a_2\cdots a_n}.
+	\]
+
+	Równość zachodzi wtedy i tylko wtedy, gdy
+	\[
+		\frac{a_1}{g}=\frac{a_2}{g}=\cdots=\frac{a_n}{g}=1,
+	\]
+	czyli
+	\[
+		a_1=a_2=\cdots=a_n.
+	\]
+\end{proof}
+
+\begin{example}\label{E1}
+	Wyznacz minimum
+	\[
+		x+\frac{4}{x^2},\qquad x>0.
+	\]
+\end{example}
+
+\begin{solution*}[\ref{E1}]
+	Rozbijamy pierwszy składnik:
+	\[
+		x+\frac4{x^2}
+		=
+		\frac x2+\frac x2+\frac4{x^2}.
+	\]
+
+	Iloczyn tych trzech liczb jest równy $1$, więc
+	\[
+		x+\frac4{x^2}\ge3.
+	\]
+
+	Równość zachodzi dla
+	\[
+		\frac x2=\frac4{x^2},
+	\]
+	czyli dla $x=2$.
+\end{solution*}
+
+\subsection{Jak dobierać składniki?}
+
+Sztuczka często polega nie na samym użyciu AM--GM,
+lecz na takim zapisaniu wyrażenia, aby:
+
+\begin{itemize}
+	\item wszystkie składniki były dodatnie,
+	\item ich suma albo iloczyn był łatwy do kontrolowania
+	(o kontrolowaniu uchylimy rąbka tajemnicy za chwilę),
+	\item warunek równości dało się rzeczywiście spełnić.
+\end{itemize}
+
+Na przykład, aby oszacować $x(4-x)^2$, naturalnie patrzymy na
+\[
+	x,\qquad \frac{4-x}{2},\qquad \frac{4-x}{2},
+\]
+bo ich suma jest równa $4$.
+
+Jeżeli potęgi są różne, powtarzamy składniki. Wyrażenie
+\[
+	xy^2z^3
+\]
+sugeruje sześć liczb
+\[
+	x,\quad \frac y2,\frac y2,\quad
+	\frac z3,\frac z3,\frac z3.
+\]
+
+\subsection{Jednorodność i normalizacja}
+
+Nierówność nazywamy \emph{jednorodną stopnia $d$}, jeżeli po zastąpieniu
+\[
+	(a,b,c)\longmapsto(ta,tb,tc)
+\]
+obie strony mnożą się przez $t^d$.
+
+Przykładowo
+\[
+	(a+b+c)^2\ge3(ab+bc+ca)
+\]
+jest jednorodna stopnia $2$, a
+\[
+	(a+b+c)\left(\frac1a+\frac1b+\frac1c\right)\ge9
+\]
+jest jednorodna stopnia $0$: po przeskalowaniu zmiennych całe wyrażenie
+w ogóle się nie zmienia.
+
+Jednorodność pozwala nam \emph{znormalizować} zmienne. Jeśli nierówność
+jest jednorodna, możemy często bez straty ogólności założyć na przykład
+\[
+	a+b+c=1,\qquad a+b+c=3
+\]
+albo
+\[
+	abc=1,
+\]
+wybierając odpowiedni wspólny mnożnik.
+
+Czasem robimy operację odwrotną: \emph{ujednoradniamy} zadanie.
+Na przykład przy warunku $a+b+c=3$ nierówność
+\[
+	a^2+b^2+c^2\ge3
+\]
+wygodniej zapisać jako
+\[
+	3(a^2+b^2+c^2)\ge(a+b+c)^2.
+\]
+
+Stała zniknęła, a otrzymana nierówność jest jednorodna.
+
+\begin{remark}
+	Normalizować można tylko wtedy, gdy skala rzeczywiście nie ma znaczenia.
+	Jeżeli po pomnożeniu wszystkich zmiennych przez $t$ obie strony zmieniają
+	się inaczej, nie wolno po prostu założyć $a+b+c=1$.
+\end{remark}
+
+\subsection{AM--HM}
+
+Stosując AM--GM do liczb odwrotnych, otrzymujemy
+\[
+	\frac{\frac1{a_1}+\cdots+\frac1{a_n}}{n}
+	\ge
+	\frac1{\sqrt[n]{a_1\cdots a_n}},
+\]
+a po odwróceniu
+\[
+	H\le G.
+\]
+
+AM--HM jest szczególnie wygodne wtedy, gdy w zadaniu pojawia się suma
+odwrotności.
+
+\begin{example}\label{E2}
+	Dla $a,b,c>0$ pokaż, że
+	\[
+		\frac1{a+b}+\frac1{b+c}+\frac1{c+a}
+		\ge
+		\frac9{2(a+b+c)}.
+	\]
+\end{example}
+
+\begin{solution*}[\ref{E2}]
+	Stosujemy AM--HM do liczb
+	\[
+		a+b,\qquad b+c,\qquad c+a.
+	\]
+
+	Ich średnia arytmetyczna wynosi
+	\[
+		\frac{2(a+b+c)}3,
+	\]
+	więc
+	\[
+		\frac{3}{
+			\frac1{a+b}+\frac1{b+c}+\frac1{c+a}
+		}
+		\le
+		\frac{2(a+b+c)}3,
+	\]
+	co po przekształceniu daje tezę.
+\end{solution*}
+
+\newpage
+
+\section{Zadania}
+
+\begin{problem}{$\clubsuit$}\label{Z1}
+	Wyznacz najmniejszą wartość
+	\[
+		(x+3)\left(1+\frac3x\right),
+		\qquad x>0.
+	\]
+	Dla jakiego $x$ jest ona osiągana?
+\end{problem}
+
+\begin{problem}\label{Z2}
+	Niech $a,b,c>0$ oraz $a+b+c=3$. Udowodnij, że
+	\[
+		(1+a)(1+b)(1+c)\le8.
+	\]
+	Kiedy zachodzi równość?
+\end{problem}
+
+\begin{problem}\label{Z3}
+	Niech $a,b,c>0$ oraz $abc=1$. Udowodnij, że
+	\[
+		(1+a)(1+b)(1+c)\ge8.
+	\]
+	Porównaj pomysł z poprzednim zadaniem.
+\end{problem}
+
+\begin{problem}\label{Z4}
+	Liczby $a,b,c$ są dodatnie i $abc=1$. Udowodnij, że
+	\[
+		(a+b)(b+c)(c+a)\ge8.
+	\]
+\end{problem}
+
+\begin{problem}{$\diamondsuit$}\label{Z5}
+	Dla każdej dodatniej liczby naturalnej $n$ udowodnij
+	\[
+		n!\le\left(\frac{n+1}{2}\right)^n.
+	\]
+	Dla jakich $n$ zachodzi równość?
+\end{problem}
+
+\begin{problem}{$\clubsuit$}\label{Z6}
+	Prostopadłościan ma dodatnie krawędzie $a,b,c$ i pole powierzchni równe $96$.
+	Wyznacz największą możliwą objętość prostopadłościanu.
+\end{problem}
+
+\begin{problem}[$\redheart$]\label{Z7}
+	Dla dodatnich $a,b,c$ udowodnij
+	\[
+		(a+b+c)^2\ge3(ab+bc+ca).
+	\]
+\end{problem}
+
+\begin{problem}\label{Z8}
+	Dla dodatnich $a,b,c$ wyznacz najmniejszą wartość
+	\[
+		\frac{a^2+b^2+c^2}{(a+b+c)^2}.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z9}
+	Dla $a,b,c>0$ udowodnij
+	\[
+		(a+b+c)(ab+bc+ca)\ge9abc.
+	\]
+\end{problem}
+
+\begin{problem}{$\diamondsuit$}\label{Z10}
+	Udowodnij, że dla dowolnych liczb dodatnich $a,b$ oraz liczby naturalnej $m$
+	zachodzi nierówność
+	\[
+		\left(1+\frac ab\right)^m+
+		\left(1+\frac ba\right)^m
+		\ge 2^{m+1}.
+	\]
+\end{problem}
+
+\begin{problem}[$\redheart$]\label{Z11}
+	Niech $a,b,c>0$ oraz $abc=1$. Udowodnij, że
+	\[
+		a^2+b^2+c^2\ge a+b+c.
+	\]
+\end{problem}
+
+\begin{problem}{$\spadesuit$}\label{Z12}
+	Udowodnij, że dla dowolnej liczby naturalnej $n\ge2$ zachodzą nierówności
+	\[
+		\left(\frac{2n+1}{3}\right)^{\frac{n(n+1)}2}
+		>
+		\prod_{i=2}^{n} i^i
+		>
+		\left(\frac{n+1}{2}\right)^{\frac{n(n+1)}2}.
+	\]
+\end{problem}
+
+\begin{problem}{$\spadesuit$}\label{Z13}
+	Niech $a_1,a_2,\dots,a_n$ będą dodatnimi liczbami oraz niech
+	$q_1,q_2,\dots,q_n$ będą dodatnimi liczbami wymiernymi spełniającymi(uwaga w ogólności wystarczy, że są to liczby dodatnie)
+	\[
+		q_1+q_2+\cdots+q_n=1.
+	\]
+	Udowodnij ważoną nierówność AM--GM
+	\[
+		q_1a_1+q_2a_2+\cdots+q_na_n
+		\ge
+		a_1^{q_1}a_2^{q_2}\cdots a_n^{q_n}.
+	\]
+	Udowodnij również, że równość zachodzi wtedy i tylko wtedy, gdy
+	\[
+		a_1=a_2=\cdots=a_n.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z14}
+	Niech $a,b,c>0$ oraz
+	\[
+		a^2+b^2+c^2=1.
+	\]
+	Udowodnij, że
+	\[
+		\frac{ab}{c}+\frac{bc}{a}+\frac{ca}{b}\ge\sqrt3.
+	\]
+	Kiedy zachodzi równość?
+\end{problem}
+
+\begin{problem}\label{Z15}
+	Niech $a,b,c>0$ oraz
+	\[
+		a^2+b^2+c^2=1.
+	\]
+	Udowodnij, że
+	\[
+		a^3\left(\frac bc+\frac cb\right)
+		+b^3\left(\frac ca+\frac ac\right)
+		+c^3\left(\frac ab+\frac ba\right)
+		+3abc
+		\ge\sqrt3.
+	\]
+\end{problem}
+
+\begin{problem}[$\redheart$]\label{Z16}
+	Dla dodatnich $a,b,c$ udowodnij
+	\[
+		(a^2b+b^2c+c^2a)(ab^2+bc^2+ca^2)
+		\ge 9a^2b^2c^2.
+	\]
+\end{problem}
+
+\begin{problem}[$\redheart$]\label{Z17}
+	Wypukły $n$-kąt ma obwód $P$. Udowodnij, że istnieją trzy kolejne
+	wierzchołki tworzące trójkąt o polu nie większym niż
+	\[
+		\frac{P^2}{2n^2}.
+	\]
+\end{problem}
+
+% \begin{problem}[$\redheart\ \redheart$]\label{Z18}
+% Niech $G$ będzie grafem o $n$ wierzchołkach, którego największy zbiór
+% niezależny ma rozmiar co najwyżej $\alpha$.
+
+% Krawędzie grafu pokryto pełnymi grafami dwudzielnymi
+% \[
+% K_{A_1,B_1},K_{A_2,B_2},\dots,K_{A_m,B_m}.
+% \]
+
+% To znaczy: każda krawędź $G$ należy do co najmniej jednego z tych grafów.
+% Udowodnij, że
+% \[
+% \sum_{i=1}^m\bigl(|A_i|+|B_i|\bigr)
+% \ge
+% n\log_2\frac{n}{\alpha}.
+% \]
+% \end{problem}
+
+\ifshowsolutions
+
+\newpage
+
+\section{Rozwiązania}
+
+\begin{solution*}[\ref{Z1}]
+	Po rozwinięciu
+	\[
+		(x+3)\left(1+\frac3x\right)
+		=x+6+\frac9x.
+	\]
+	Z AM--GM
+	\[
+		x+\frac9x\ge6,
+	\]
+	więc całe wyrażenie jest co najmniej równe $12$.
+	Równość zachodzi dla $x=3$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z2}]
+	Liczby
+	\[
+		1+a,\qquad1+b,\qquad1+c
+	\]
+	mają sumę równą $6$. Zatem
+	\[
+		(1+a)(1+b)(1+c)
+		\le
+		\left(\frac63\right)^3=8.
+	\]
+	Równość zachodzi dla $a=b=c=1$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z3}]
+	Dla każdej dodatniej liczby $t$ mamy
+	\[
+		1+t\ge2\sqrt t.
+	\]
+	Stąd
+	\[
+		(1+a)(1+b)(1+c)
+		\ge
+		8\sqrt{abc}=8.
+	\]
+	Równość zachodzi dla $a=b=c=1$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z4}]
+	Mamy
+	\[
+		a+b\ge2\sqrt{ab},\qquad
+		b+c\ge2\sqrt{bc},\qquad
+		c+a\ge2\sqrt{ca}.
+	\]
+	Po pomnożeniu:
+	\[
+		(a+b)(b+c)(c+a)\ge8abc=8.
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z5}]
+	Średnia arytmetyczna liczb $1,2,\dots,n$ wynosi
+	\[
+		\frac{1+2+\cdots+n}{n}=\frac{n+1}{2}.
+	\]
+	Z AM--GM
+	\[
+		\sqrt[n]{n!}\le\frac{n+1}{2},
+	\]
+	a więc
+	\[
+		n!\le\left(\frac{n+1}{2}\right)^n.
+	\]
+	Równość zachodzi tylko dla $n=1$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z6}]
+	Z warunku na pole powierzchni
+	\[
+		2(ab+bc+ca)=96,
+	\]
+	czyli
+	\[
+		ab+bc+ca=48.
+	\]
+	Z AM--GM dla $ab,bc,ca$:
+	\[
+		16=\frac{ab+bc+ca}{3}
+		\ge
+		\sqrt[3]{a^2b^2c^2}
+		=(abc)^{2/3}.
+	\]
+	Zatem
+	\[
+		abc\le64.
+	\]
+	Równość zachodzi dla $a=b=c=4$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z7}]
+	Dodając
+	\[
+		a^2+b^2\ge2ab,\qquad
+		b^2+c^2\ge2bc,\qquad
+		c^2+a^2\ge2ca,
+	\]
+	otrzymujemy
+	\[
+		a^2+b^2+c^2\ge ab+bc+ca.
+	\]
+	Po dodaniu $2(ab+bc+ca)$ do obu stron:
+	\[
+		(a+b+c)^2\ge3(ab+bc+ca).
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z8}]
+	Wyrażenie jest jednorodne stopnia $0$, więc możemy założyć
+	\[
+		a+b+c=1.
+	\]
+	Z $Q\ge A$:
+	\[
+		a^2+b^2+c^2
+		\ge
+		\frac{(a+b+c)^2}{3}
+		=
+		\frac13.
+	\]
+	Minimum wynosi $\frac13$ i jest osiągane dla $a=b=c$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z9}]
+	Z AM--GM
+	\[
+		a+b+c\ge3\sqrt[3]{abc}
+	\]
+	oraz
+	\[
+		ab+bc+ca
+		\ge
+		3\sqrt[3]{(ab)(bc)(ca)}
+		=
+		3\sqrt[3]{a^2b^2c^2}.
+	\]
+	Po pomnożeniu otrzymujemy
+	\[
+		(a+b+c)(ab+bc+ca)\ge9abc.
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z10}]
+	Oznaczmy
+	\[
+		x=\frac ab>0.
+	\]
+	Wtedy
+	\[
+		\left(1+\frac ab\right)^m+\left(1+\frac ba\right)^m
+		=
+		(1+x)^m+\left(1+\frac1x\right)^m.
+	\]
+	Z AM--GM dla dwóch składników:
+	\[
+		(1+x)^m+\left(1+\frac1x\right)^m
+		\ge
+		2\sqrt{
+			\left((1+x)\left(1+\frac1x\right)\right)^m
+		}.
+	\]
+	Ponieważ
+	\[
+		(1+x)\left(1+\frac1x\right)
+		=
+		2+x+\frac1x
+		\ge4,
+	\]
+	otrzymujemy
+	\[
+		\left(1+\frac ab\right)^m+\left(1+\frac ba\right)^m
+		\ge
+		2\cdot4^{m/2}
+		=
+		2^{m+1}.
+	\]
+	Równość zachodzi dla $a=b$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z11}]
+	Stosujemy AM--GM do sześciu liczb
+	\[
+		a^2,a^2,a^2,a^2,b^2,c^2.
+	\]
+	Dostajemy
+	\[
+		\frac{4a^2+b^2+c^2}{6}
+		\ge
+		\sqrt[6]{a^8b^2c^2}.
+	\]
+	Ponieważ $abc=1$, mamy
+	\[
+		a^8b^2c^2=a^6,
+	\]
+	więc
+	\[
+		4a^2+b^2+c^2\ge6a.
+	\]
+	Analogicznie
+	\[
+		a^2+4b^2+c^2\ge6b,
+		\qquad
+		a^2+b^2+4c^2\ge6c.
+	\]
+	Po dodaniu:
+	\[
+		6(a^2+b^2+c^2)\ge6(a+b+c).
+	\]
+	Zatem
+	\[
+		a^2+b^2+c^2\ge a+b+c.
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z12}]
+	Rozważmy następujący zbiór
+	\[
+		\frac{n(n+1)}2
+	\]
+	liczb:
+	\[
+		1,\quad
+		2,2,\quad
+		3,3,3,\quad
+		\dots,\quad
+		\underbrace{n,n,\dots,n}_{n}.
+	\]
+
+	Ich iloczyn wynosi
+	\[
+		1^1\cdot2^2\cdot3^3\cdots n^n
+		=
+		\prod_{i=2}^n i^i,
+	\]
+	natomiast ich suma jest równa
+	\[
+		1^2+2^2+\cdots+n^2
+		=
+		\frac{n(n+1)(2n+1)}6.
+	\]
+
+	Z AM--GM
+	\[
+		\sqrt[\frac{n(n+1)}2]
+		{\prod_{i=2}^n i^i}
+		<
+		\frac{
+			\frac{n(n+1)(2n+1)}6
+		}{
+			\frac{n(n+1)}2
+		}
+		=
+		\frac{2n+1}{3}.
+	\]
+
+	Stąd
+	\[
+		\prod_{i=2}^n i^i
+		<
+		\left(\frac{2n+1}{3}\right)^{\frac{n(n+1)}2}.
+	\]
+
+	Dla drugiej nierówności rozważmy liczby
+	\[
+		1,\quad
+		\frac12,\frac12,\quad
+		\frac13,\frac13,\frac13,\quad
+		\dots,\quad
+		\underbrace{\frac1n,\dots,\frac1n}_{n}.
+	\]
+
+	Ponownie jest ich $\frac{n(n+1)}2$, a ich suma wynosi
+	\[
+		1+1+\cdots+1=n.
+	\]
+
+	Z AM--GM
+	\[
+		\sqrt[\frac{n(n+1)}2]
+		{
+			\frac1{\prod_{i=2}^n i^i}
+		}
+		<
+		\frac{n}{\frac{n(n+1)}2}
+		=
+		\frac2{n+1}.
+	\]
+
+	Zatem
+	\[
+		\frac1{\prod_{i=2}^n i^i}
+		<
+		\left(\frac2{n+1}\right)^{\frac{n(n+1)}2},
+	\]
+	a po odwróceniu
+	\[
+		\prod_{i=2}^n i^i
+		>
+		\left(\frac{n+1}{2}\right)^{\frac{n(n+1)}2}.
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z13}]
+	Najpierw załóżmy, że wszystkie wagi $q_i$ są wymierne. Możemy wtedy
+	zapisać
+	\[
+		q_i=\frac{k_i}{m},
+	\]
+	gdzie $k_1,\dots,k_n$ są dodatnimi liczbami naturalnymi oraz
+	\[
+		k_1+\cdots+k_n=m.
+	\]
+
+	Rozważmy $m$ liczb, wśród których $a_i$ występuje dokładnie $k_i$ razy.
+	Z AM--GM otrzymujemy
+	\[
+		\frac{k_1a_1+\cdots+k_na_n}{m}
+		\ge
+		\sqrt[m]{a_1^{k_1}\cdots a_n^{k_n}}.
+	\]
+
+	Lewa strona jest równa
+	\[
+		q_1a_1+\cdots+q_na_n,
+	\]
+	natomiast prawa
+	\[
+		a_1^{q_1}\cdots a_n^{q_n}.
+	\]
+
+	Zatem
+	\[
+		q_1a_1+\cdots+q_na_n
+		\ge
+		a_1^{q_1}\cdots a_n^{q_n}.
+	\]
+
+	Dla dowolnych rzeczywistych wag dodatnich wynik otrzymujemy przez
+	przybliżanie wag liczbami wymiernymi i przejście do granicy.
+
+	Równość w AM--GM zachodzi wtedy i tylko wtedy, gdy wszystkie liczby,
+	do których ją stosujemy, są równe. Ponieważ wszystkie wagi są dodatnie,
+	oznacza to dokładnie
+	\[
+		a_1=a_2=\cdots=a_n.
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z14}]
+	Wprowadźmy
+	\[
+		x=\frac{ab}{c},\qquad
+		y=\frac{bc}{a},\qquad
+		z=\frac{ca}{b}.
+	\]
+	Wtedy
+	\[
+		xy=b^2,\qquad yz=c^2,\qquad zx=a^2,
+	\]
+	a zatem
+	\[
+		xy+yz+zx=a^2+b^2+c^2=1.
+	\]
+	Ponieważ
+	\[
+		(x+y+z)^2\ge3(xy+yz+zx),
+	\]
+	mamy
+	\[
+		x+y+z\ge\sqrt3.
+	\]
+	Po powrocie do $a,b,c$ dostajemy
+	\[
+		\frac{ab}{c}+\frac{bc}{a}+\frac{ca}{b}\ge\sqrt3.
+	\]
+	Równość zachodzi wtedy i tylko wtedy, gdy $x=y=z$, czyli $a=b=c$.
+	Z warunku
+	\[
+		a^2+b^2+c^2=1
+	\]
+	otrzymujemy wtedy
+	\[
+		a=b=c=\frac1{\sqrt3}.
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z15}]
+	Lewą stronę można rozpoznać jako iloczyn
+	\[
+		(a^2+b^2+c^2)
+		\left(
+		\frac{ab}{c}+\frac{bc}{a}+\frac{ca}{b}
+		\right).
+	\]
+	Rzeczywiście, po wymnożeniu otrzymujemy dokładnie
+	\[
+		a^3\left(\frac bc+\frac cb\right)
+		+b^3\left(\frac ca+\frac ac\right)
+		+c^3\left(\frac ab+\frac ba\right)
+		+3abc.
+	\]
+	Ponieważ
+	\[
+		a^2+b^2+c^2=1,
+	\]
+	lewa strona jest równa
+	\[
+		\frac{ab}{c}+\frac{bc}{a}+\frac{ca}{b}.
+	\]
+	Teza wynika więc bezpośrednio z poprzedniego zadania.
+\end{solution*}
+
+\begin{solution*}[\ref{Z16}]
+	W każdym nawiasie stosujemy AM--GM:
+	\[
+		a^2b+b^2c+c^2a
+		\ge
+		3\sqrt[3]{(a^2b)(b^2c)(c^2a)}
+		=
+		3abc.
+	\]
+	Podobnie
+	\[
+		ab^2+bc^2+ca^2
+		\ge3abc.
+	\]
+	Po pomnożeniu dostajemy
+	\[
+		(a^2b+b^2c+c^2a)(ab^2+bc^2+ca^2)
+		\ge9a^2b^2c^2.
+	\]
+\end{solution*}
+
+\begin{solution*}[\ref{Z17}]
+	Niech długości kolejnych boków będą równe
+	\[
+		x_1,x_2,\dots,x_n.
+	\]
+	Suma liczb
+	\[
+		x_1+x_2,\ x_2+x_3,\ \dots,\ x_n+x_1
+	\]
+	wynosi $2P$. Z zasady szufladkowej dla pewnego $i$ mamy więc
+	\[
+		x_i+x_{i+1}\le\frac{2P}{n}.
+	\]
+	Pole trójkąta wyznaczonego przez te dwa kolejne boki jest nie większe niż
+	\[
+		\frac12x_ix_{i+1}.
+	\]
+	Z AM--GM
+	\[
+		x_ix_{i+1}
+		\le
+		\left(\frac{x_i+x_{i+1}}2\right)^2.
+	\]
+	Stąd
+	\[
+		[\triangle]
+		\le
+		\frac{(x_i+x_{i+1})^2}{8}
+		\le
+		\frac18\left(\frac{2P}{n}\right)^2
+		=
+		\frac{P^2}{2n^2}.
+	\]
+\end{solution*}
+
+% \begin{solution*}[\ref{Z18}]
+% Dla każdego $i$ wybierzmy niezależnie i z prawdopodobieństwem $\frac12$
+% jedną z dwóch części $A_i,B_i$.
+
+% Nazwijmy wierzchołek $v$ \emph{dobrym}, jeżeli we wszystkich grafach
+% dwudzielnych, do których należy, znajduje się po wybranej stronie.
+
+% Dwa sąsiednie wierzchołki nie mogą być jednocześnie dobre: istnieje bowiem
+% jeden z pokrywających grafów dwudzielnych, w którym leżą po przeciwnych
+% stronach. Zatem zbiór dobrych wierzchołków jest niezależny, więc zawsze ma
+% co najwyżej $\alpha$ elementów.
+
+% Niech $d(v)$ oznacza liczbę grafów dwudzielnych zawierających $v$.
+% Wtedy
+% \[
+% \Pr(v\text{ jest dobry})=2^{-d(v)}.
+% \]
+
+% Z liniowości wartości oczekiwanej
+% \[
+% \mathbb E|X|
+% =
+% \sum_v2^{-d(v)}.
+% \]
+
+% Z AM--GM:
+% \[
+% \frac1n\sum_v2^{-d(v)}
+% \ge
+% \sqrt[n]{\prod_v2^{-d(v)}}
+% =
+% 2^{-\frac1n\sum_vd(v)}.
+% \]
+
+% Jeśli
+% \[
+% S=\sum_{i=1}^m(|A_i|+|B_i|),
+% \]
+% to
+% \[
+% S=\sum_vd(v).
+% \]
+
+% A zatem
+% \[
+% \alpha
+% \ge
+% \mathbb E|X|
+% \ge
+% n2^{-S/n}.
+% \]
+
+% Po przekształceniu
+% \[
+% S\ge n\log_2\frac{n}{\alpha}.
+% \]
+% \end{solution*}
+
+\fi
+
+\end{document}

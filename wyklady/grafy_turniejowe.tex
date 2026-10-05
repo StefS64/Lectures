@@ -1,0 +1,413 @@
+\documentclass{lecture-kuznia}
+\usepackage{textcomp}
+\usepackage{comment}
+
+\def\title{Turnieje: porządek ukryty w chaosie}
+\def\data{2026}
+\def\place{Poręba Wielka}
+\def\group{Finaliści}
+\def\author{Autor: Stefan Świerczewski}
+\def\lecturer{Prowadzący: Stefan Świerczewski}
+\def\event{WM 2026}
+
+\ifshowsolutions
+  \newenvironment{solutionbox}{%
+    \par\smallskip\begingroup\color{black!85}%
+    \noindent\textbf{Rozwiązanie. }%
+  }{%
+    \hfill$\blacksquare$\par\smallskip\endgroup
+  }
+\else
+  \excludecomment{solutionbox}
+\fi
+
+\newcounter{zadanie}
+\newenvironment{zadanie}[1][]{%
+  \refstepcounter{zadanie}%
+  \par\medskip\noindent
+  \textbf{Zadanie \thezadanie.}%
+  \ifstrempty{#1}{}{ \textit{(#1)}}%
+  \quad
+}{\par\medskip}
+
+\newcommand{\outn}[1]{N^+(#1)}
+\newcommand{\inn}[1]{N^-(#1)}
+\newcommand{\outd}[1]{d^+(#1)}
+
+\begin{document}
+
+\begin{center}
+  {\Huge\textbf{\title}}
+
+  \medskip
+  {\large Dziewięć problemów o szukaniu struktury w grafie skierowanym}
+\end{center}
+
+\fontsize{12}{16}\selectfont
+
+\section{Tylko język}
+
+\textbf{Turniejem} nazywamy graf otrzymany przez skierowanie każdej krawędzi
+grafu pełnego. Zapis $x\to y$ oznacza, że krawędź pomiędzy $x$ i $y$ jest
+skierowana od $x$ do $y$. Można myśleć, że zawodnik $x$ wygrał z zawodnikiem
+$y$; remisów nie ma i każda para rozegrała dokładnie jeden mecz.
+
+Dla wierzchołka $v$ oznaczamy
+\[
+  \outn v=\{x:v\to x\},\qquad
+  \inn v=\{x:x\to v\},\qquad
+  \outd v=|\outn v|.
+\]
+Liczbę $\outd v$ nazywamy \textbf{wynikiem} wierzchołka $v$.
+
+Turniej jest \textbf{silnie spójny}, jeśli z każdego wierzchołka można dojść
+do każdego innego, idąc zgodnie ze strzałkami. Jest \textbf{przechodni}, jeśli
+jego wierzchołki można ustawić w kolejności $v_1,\ldots,v_n$ tak, że
+$v_i\to v_j$ dla wszystkich $i<j$. Wierzchołek $v$ jest \textbf{królem}, jeśli
+do każdego innego wierzchołka można dojść z $v$ w co najwyżej dwóch krokach.
+
+To cała teoria potrzebna na wejściu. W zadaniach będą stale wracały cztery
+ruchy:
+\begin{itemize}
+  \item wybór wierzchołka o ekstremalnym wyniku;
+  \item maksymalizacja ścieżki, cyklu albo uporządkowania;
+  \item zliczanie tego samego obiektu na dwa sposoby;
+  \item losowanie turnieju i oszacowanie wartości oczekiwanej.
+\end{itemize}
+
+\section{Pierwsza runda}
+
+\begin{zadanie}[ścieżka zamiast tabeli wyników]
+Udowodnij, że wierzchołki każdego turnieju można ustawić w kolejności
+\[
+  v_1,v_2,\ldots,v_n
+\]
+tak, aby $v_i\to v_{i+1}$ dla każdego $i<n$.
+
+Udowodnij również, że turniej jest przechodni wtedy i tylko wtedy, gdy nie
+zawiera skierowanego trójkąta.
+\end{zadanie}
+
+\begin{solutionbox}
+Pierwszą część dowodzimy indukcyjnie. Usuńmy wierzchołek $x$ i ustawmy
+pozostałe w ścieżkę
+\[
+  v_1\to v_2\to\ldots\to v_{n-1}.
+\]
+Jeżeli $x\to v_1$, wstawiamy $x$ na początku. Jeżeli $v_{n-1}\to x$,
+wstawiamy go na końcu. W przeciwnym razie, idąc wzdłuż ścieżki, w pewnym
+miejscu po raz pierwszy zmienia się relacja z $x$. Znajdziemy więc indeks $i$
+taki, że
+\[
+  v_i\to x\to v_{i+1},
+\]
+i wstawimy $x$ pomiędzy $v_i$ i $v_{i+1}$.
+
+Turniej przechodni nie zawiera skierowanego cyklu, a więc w szczególności
+skierowanego trójkąta. W drugą stronę weźmy otrzymaną wyżej ścieżkę. Gdyby
+dla pewnych $i<j$ zachodziło $v_j\to v_i$, wybierzmy taką parę z najmniejszą
+różnicą $j-i$. Mamy $j-i>1$. Jeżeli $v_{i+1}\to v_j$, to
+\[
+  v_j\to v_i\to v_{i+1}\to v_j
+\]
+jest skierowanym trójkątem. W przeciwnym razie $v_j\to v_{i+1}$, wbrew
+minimalności różnicy $j-i$. Zatem każda krawędź biegnie do przodu i turniej
+jest przechodni.
+\end{solutionbox}
+
+\begin{zadanie}[król]
+Udowodnij, że każdy turniej ma króla.
+\end{zadanie}
+
+\begin{solutionbox}
+Wybierzmy wierzchołek $v$ o największym wyniku. Rozważmy dowolny wierzchołek
+$u$, dla którego $u\to v$. Gdyby nie istniał wierzchołek $w$ spełniający
+$v\to w\to u$, to $u$ wygrywałby ze wszystkimi zawodnikami pokonanymi przez
+$v$, a dodatkowo także z samym $v$. Wtedy
+\[
+  \outd u\geq \outd v+1,
+\]
+co przeczy wyborowi $v$. Każdy zawodnik jest więc osiągalny z $v$ w jednym
+albo dwóch krokach.
+\end{solutionbox}
+
+\begin{zadanie}[cykl przez wszystkich]
+Udowodnij, że każdy silnie spójny turniej na co najmniej trzech wierzchołkach
+ma skierowany cykl przechodzący przez wszystkie wierzchołki dokładnie raz.
+\end{zadanie}
+
+\begin{solutionbox}
+Weźmy najdłuższy skierowany cykl $C$. Ma on co najmniej trzy wierzchołki:
+najkrótszy skierowany cykl w turnieju musi być trójkątem, bo każda cięciwa
+dłuższego cyklu skracałaby go z jednej albo z drugiej strony.
+
+Przypuśćmy, że $x\notin C$. Jeżeli $x$ zarówno wygrywa, jak i przegrywa z
+wierzchołkami $C$, to na cyklu występują dwa kolejne wierzchołki $c_i,c_{i+1}$
+takie, że
+\[
+  c_i\to x\to c_{i+1}.
+\]
+Można wtedy wstawić $x$ do $C$, sprzecznie z maksymalnością. Każdy wierzchołek
+spoza $C$ należy zatem do jednego z dwóch zbiorów
+\[
+  A=\{x:C\to x\},\qquad B=\{x:x\to C\},
+\]
+gdzie $C\to x$ oznacza, że każdy wierzchołek cyklu wygrywa z $x$.
+
+Silna spójność wymusza $A\neq\varnothing$ i $B\neq\varnothing$. Ponadto nie
+wszystkie krawędzie pomiędzy $A$ i $B$ mogą biec z $B$ do $A$, bo wtedy z
+$A$ nie dałoby się dojść do $B$ ani do $C$. Istnieją więc $a\in A$ i $b\in B$
+takie, że $a\to b$. Dowolną krawędź $c_i\to c_{i+1}$ cyklu można zastąpić
+ścieżką
+\[
+  c_i\to a\to b\to c_{i+1},
+\]
+otrzymując dłuższy cykl. Sprzeczność dowodzi, że $C$ zawiera wszystkie
+wierzchołki.
+\end{solutionbox}
+
+\section{Zliczanie i przypadek losowy}
+
+\begin{zadanie}[ile może być paradoksów?]
+Trójkę wierzchołków nazwiemy \textit{cykliczną}, jeśli tworzy ona skierowany
+trójkąt. Wyznacz największą możliwą liczbę cyklicznych trójek w turnieju na
+$n$ wierzchołkach. Scharakteryzuj przypadek równości za pomocą wyników
+wierzchołków.
+\end{zadanie}
+
+\begin{solutionbox}
+Niech wyniki wierzchołków będą równe $d_1,\ldots,d_n$. Każda trójka jest
+albo cykliczna, albo przechodnia. W trójce przechodniej istnieje dokładnie
+jeden wierzchołek wygrywający z pozostałymi dwoma. Wobec tego liczba trójek
+przechodnich wynosi
+\[
+  \sum_{i=1}^n\binom{d_i}{2}.
+\]
+Jeśli $T$ oznacza liczbę trójek cyklicznych, to
+\[
+  T=\binom n3-\sum_{i=1}^n\binom{d_i}{2}.             \tag{1}
+\]
+Ponadto $\sum_i d_i=\binom n2$. Dla ustalonej sumy wyrażenie
+$\sum_i\binom{d_i}{2}$ jest najmniejsze, gdy liczby $d_i$ różnią się o co
+najwyżej $1$: jeśli $a\geq b+2$, to zastąpienie pary $(a,b)$ przez
+$(a-1,b+1)$ zmniejsza tę sumę.
+
+Jeżeli $n$ jest nieparzyste, dostajemy $d_i=(n-1)/2$ dla każdego $i$ i
+\[
+  T_{\max}=\frac{n(n^2-1)}{24}.
+\]
+Jeżeli $n$ jest parzyste, połowa wyników jest równa $n/2$, a połowa
+$n/2-1$, skąd
+\[
+  T_{\max}=\frac{n(n^2-4)}{24}.
+\]
+
+Równość rzeczywiście jest osiągalna. Dla $n=2m+1$ ustawmy wierzchołki
+cyklicznie modulo $n$ i skierujmy $i\to j$, gdy
+$j-i\pmod n\in\{1,\ldots,m\}$. Każdy wynik jest równy $m$. Dla parzystego
+$n$ usuwamy jeden wierzchołek z takiego regularnego turnieju na $n+1$
+wierzchołkach. Wzór (1) pokazuje zarazem, że opisane rozkłady wyników są
+konieczne dla równości.
+\end{solutionbox}
+
+\begin{zadanie}[duży uporządkowany fragment]
+Niech $k\geq 1$.
+\begin{enumerate}[label=\alph*)]
+  \item Udowodnij, że każdy turniej na co najmniej $2^{k-1}$ wierzchołkach
+  zawiera przechodni podturniej na $k$ wierzchołkach.
+  \item Udowodnij, że dla każdych $k\leq N<2^{(k-1)/2}$ istnieje turniej na
+  $N$ wierzchołkach, który nie zawiera przechodniego podturnieju na $k$
+  wierzchołkach.
+\end{enumerate}
+\end{zadanie}
+
+\begin{solutionbox}
+Pierwszą część dowodzimy indukcyjnie po $k$. Wybierzmy dowolny wierzchołek
+$v$. Co najmniej jeden ze zbiorów $\outn v,\inn v$ ma co najmniej
+$2^{k-2}$ elementów. Z założenia indukcyjnego zawiera on przechodni
+podturniej na $k-1$ wierzchołkach. Dołączając $v$ na początku albo na końcu
+jego przechodniego porządku, otrzymujemy szukane $k$ wierzchołków.
+
+W drugiej części skierujmy każdą krawędź niezależnie, z prawdopodobieństwem
+$1/2$ w każdą stronę. Ustalony zbiór $k$ wierzchołków jest przechodni z
+prawdopodobieństwem
+\[
+  \frac{k!}{2^{\binom k2}},
+\]
+bo każdemu z $k!$ liniowych porządków odpowiada dokładnie jedno przechodnie
+skierowanie. Oczekiwana liczba przechodnich $k$-elementowych podturniejów
+jest więc mniejsza lub równa
+\[
+  \binom Nk\frac{k!}{2^{\binom k2}}
+  \leq \frac{N^k}{2^{k(k-1)/2}}<1.
+\]
+Istnieje zatem wybór kierunków, dla którego ta liczba jest równa zeru.
+\end{solutionbox}
+
+\begin{zadanie}[mała rada nadzorcza]
+Zbiór $S$ wierzchołków turnieju nazwiemy dominującym, jeśli dla każdego
+$x\notin S$ istnieje $s\in S$ takie, że $s\to x$. Udowodnij, że każdy
+turniej na $n$ wierzchołkach ma zbiór dominujący o rozmiarze nie większym
+niż
+\[
+  \left\lceil\log_2(n+1)\right\rceil.
+\]
+\end{zadanie}
+
+\begin{solutionbox}
+Wśród jeszcze nierozpatrzonych wierzchołków wybieramy wierzchołek $v$ o
+największym wyniku w indukowanym podturnieju. Jeżeli pozostało $m$
+wierzchołków, to $v$ wygrywa z co najmniej $(m-1)/2$ z nich. Dodajemy $v$ do
+$S$ i usuwamy $v$ wraz ze wszystkimi pokonanymi przez niego wierzchołkami.
+
+Jeżeli po $t$ krokach pozostało $m_t$ wierzchołków, to
+\[
+  m_{t+1}+1\leq\frac{m_t+1}{2},
+\]
+a więc $m_t+1\leq(n+1)/2^t$. Po
+$t=\lceil\log_2(n+1)\rceil$ krokach nic już nie pozostaje. Każdy usunięty
+wierzchołek spoza $S$ przegrał z wierzchołkiem dodanym do $S$, więc $S$ jest
+dominujący.
+\end{solutionbox}
+
+\section{Finałowe rundy}
+
+\begin{zadanie}[najlepsza kolejność wie więcej, niż powinna]
+Udowodnij, że wierzchołki każdego turnieju można ustawić w kolejności
+$v_1,\ldots,v_n$ o następujących własnościach: dla wszystkich $i<j$
+\[
+\begin{aligned}
+  \big|\{k:i<k\leq j,\ v_i\to v_k\}\big|&\geq\frac{j-i}{2},\\
+  \big|\{k:i\leq k<j,\ v_k\to v_j\}\big|&\geq\frac{j-i}{2}.
+\end{aligned}                                                  \tag{2}
+\]
+Wywnioskuj z tego ponownie, że każdy turniej ma ścieżkę przechodzącą przez
+wszystkie wierzchołki oraz króla.
+\end{zadanie}
+
+\begin{solutionbox}
+Spośród wszystkich ustawień wybierzmy takie, w którym liczba krawędzi
+biegnących do przodu, czyli krawędzi $v_p\to v_q$ z $p<q$, jest największa.
+
+Gdyby pierwsza nierówność (2) nie zachodziła dla pewnych $i<j$, to wśród
+$v_{i+1},\ldots,v_j$ więcej krawędzi biegłoby do $v_i$ niż od $v_i$.
+Przeniesienie $v_i$ tuż za $v_j$ zwiększyłoby liczbę krawędzi biegnących do
+przodu. Analogicznie, jeżeli nie zachodziłaby druga nierówność, przeniesienie
+$v_j$ tuż przed $v_i$ poprawiłoby ustawienie. Obie sytuacje przeczą
+maksymalności.
+
+Dla $j=i+1$ pierwsza nierówność wymusza $v_i\to v_{i+1}$, więc otrzymaliśmy
+ścieżkę Hamiltona.
+
+Pokażemy, że $v_1$ jest królem. Jeśli $v_1\to v_j$, sprawa jest jasna.
+Załóżmy więc, że $v_j\to v_1$. Z pierwszej nierówności dla przedziału
+$v_1,\ldots,v_j$ wynika, że $v_1$ wygrywa z co najmniej
+$\lceil(j-1)/2\rceil$ wierzchołkami spośród $v_2,\ldots,v_{j-1}$. Z drugiej
+wynika, że co najmniej $\lceil(j-1)/2\rceil$ wierzchołków z tego samego
+zbioru wygrywa z $v_j$. Zbiory te muszą się przeciąć, bo razem mają więcej
+elementów niż zbiór $\{v_2,\ldots,v_{j-1}\}$. Istnieje zatem $k$ takie, że
+\[
+  v_1\to v_k\to v_j.
+\]
+\end{solutionbox}
+
+\begin{zadanie}[gra w odwracanie trójkątów]
+Na ustalonym, ponumerowanym zbiorze wierzchołków rozważamy dwa turnieje
+$T$ i $T'$. Dozwolony ruch polega na wybraniu skierowanego trójkąta i
+odwróceniu wszystkich jego krawędzi.
+
+Udowodnij, że z $T$ można otrzymać $T'$ za pomocą takich ruchów wtedy i
+tylko wtedy, gdy każdy wierzchołek ma ten sam wynik w $T$ i w $T'$.
+\end{zadanie}
+
+\begin{solutionbox}
+Każdy wierzchołek skierowanego trójkąta ma w nim jedno zwycięstwo i jedną
+porażkę. Odwrócenie trójkąta nie zmienia więc żadnego wyniku. Pozostaje
+udowodnić drugą implikację.
+
+Najpierw zauważmy lemat: \textit{krawędzie dowolnego skierowanego cyklu
+można odwrócić za pomocą ruchów na trójkątach, nie zmieniając ostatecznie
+żadnej innej krawędzi}. Dowód prowadzimy indukcyjnie po długości cyklu
+\[
+  x_1\to x_2\to\ldots\to x_r\to x_1.
+\]
+Dla $r=3$ nie ma czego dowodzić. Jeżeli $x_3\to x_1$, najpierw odwracamy
+trójkąt $x_1x_2x_3$, a następnie krótszy cykl
+\[
+  x_1\to x_3\to x_4\to\ldots\to x_r\to x_1.
+\]
+Jeżeli $x_1\to x_3$, wykonujemy te same dwie operacje w odwrotnej kolejności.
+Cięciwa $x_1x_3$ zostaje odwrócona dwa razy, a każda krawędź pierwotnego
+cyklu dokładnie raz.
+
+Zbudujmy teraz graf skierowany $D$: umieszczamy w nim krawędź $x\to y$, gdy
+w $T$ mamy $x\to y$, a w $T'$ ta sama krawędź jest skierowana przeciwnie.
+Równość wyników w $T$ i $T'$ oznacza, że w $D$ stopień wychodzący każdego
+wierzchołka jest równy jego stopniowi wchodzącemu. Krawędzie $D$ można więc
+rozłożyć na skierowane cykle. Odwracamy kolejno te cykle, korzystając z
+lematu. Każda taka operacja uzgadnia z $T'$ wszystkie krawędzie danego cyklu
+i nie narusza pozostałych. Po skończeniu otrzymujemy $T'$.
+\end{solutionbox}
+
+\begin{zadanie}[boss: parzystość, której nie widać]
+Udowodnij, że liczba skierowanych ścieżek przechodzących przez wszystkie
+wierzchołki turnieju dokładnie raz jest zawsze nieparzysta.
+\end{zadanie}
+
+\begin{solutionbox}
+Oznaczmy zbiór krawędzi turnieju przez $E$. Dla permutacji
+$\pi=(v_1,\ldots,v_n)$ niech
+\[
+  A_\pi=\{v_i\to v_{i+1}\in E:1\leq i<n\}.
+\]
+Dla $X\subseteq E$ oznaczmy przez $f(X)$ liczbę permutacji $\pi$ takich, że
+$A_\pi=X$, a przez $g(X)$ liczbę permutacji takich, że $X\subseteq A_\pi$.
+Mamy
+\[
+  g(X)=\sum_{Y\supseteq X}f(Y).
+\]
+Z zasady włączeń i wyłączeń otrzymujemy odwrócenie tej zależności:
+\[
+  f(X)=\sum_{Y\supseteq X}(-1)^{|Y|-|X|}g(Y).           \tag{3}
+\]
+
+Wartość $g(Y)$ jest niezerowa tylko wtedy, gdy krawędzie $Y$ tworzą rozłączne
+skierowane ścieżki. Jeżeli wraz z izolowanymi wierzchołkami jest to $r$
+ścieżek, każdą z nich traktujemy jak jeden blok i dostajemy $g(Y)=r!$.
+Liczba ta jest nieparzysta dokładnie dla $r=1$, czyli wtedy, gdy $Y$ samo
+jest ścieżką przechodzącą przez wszystkie wierzchołki. Z (3), po przejściu
+modulo $2$, wynika zatem
+\[
+  f(X)\equiv h(X)\pmod 2,                               \tag{4}
+\]
+gdzie $h(X)$ oznacza liczbę ścieżek Hamiltona zawierających wszystkie
+krawędzie z $X$.
+
+Odwróćmy teraz jedną krawędź $a$ turnieju, otrzymując turniej $T'$. Tracimy
+$h(\{a\})$ ścieżek Hamiltona. Ścieżki, które zyskujemy, po zapisaniu ich
+w odwrotnej kolejności odpowiadają dokładnie tym permutacjom $\pi$ w $T$,
+dla których $A_\pi=\{a\}$. Zyskujemy więc $f(\{a\})$ ścieżek. Na mocy (4)
+obie liczby mają tę samą parzystość, zatem odwrócenie jednej krawędzi nie
+zmienia parzystości liczby ścieżek Hamiltona.
+
+Każdy turniej można otrzymać z turnieju przechodniego przez odwracanie
+pojedynczych krawędzi. Turniej przechodni ma dokładnie jedną ścieżkę
+Hamiltona. Każdy turniej ma ich więc nieparzyście wiele.
+\end{solutionbox}
+
+\ifshowsolutions
+\section{Notatka dla prowadzącego}
+
+Naturalny podział na dwa spotkania to zadania 1--6 oraz 7--9. Jeśli czasu jest
+mniej, warto zrobić wspólnie zadania 2, 4 i 7, a następnie oddać grupie
+zadanie 8. Zadanie 9 dobrze działa jako finał wykładu: potrzebuje jednego
+nowego narzędzia, ale używa go do bardzo konkretnej obserwacji o parzystości.
+
+Twierdzenia z zadań 1 i 9 są klasycznie przypisywane Rédeiemu, a twierdzenie
+z zadania 3 --- Camionowi. Zadanie 7 wykorzystuje porządek medianowy. Dobór
+trudności został porównany z zadaniami zawodów III stopnia Olimpiady
+Matematycznej; materiał nie zakłada jednak znajomości żadnego twierdzenia o
+turniejach.
+\fi
+
+\end{document}

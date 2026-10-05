@@ -1,0 +1,780 @@
+\documentclass{lecture-kuznia}
+
+\def\data{28.09.2026}
+\def\place{Poręba Wielka}
+\def\title{Nierówności, metoda stycznej}
+\def\group{Finaliści}
+\def\author{Autor: Stefan Świerczewski}
+\def\lecturer{Prowadzący: Stefan Świerczewski}
+
+\begin{document}
+\begin{center}
+	{\LARGE\textbf{\title{}}}
+\end{center}
+
+\section{Teoria}
+
+\subsection{Po co nam styczna?}
+
+Typowa nierówność ma postać
+\[
+	f(x_1)+f(x_2)+\dots+f(x_n)\geqslant C,
+	\qquad x_1+\dots+x_n=S.
+\]
+Jeżeli spodziewamy się równości dla
+\[
+	x_1=\dots=x_n=x_0:=\frac Sn,
+\]
+to szukamy prostej $L(x)=\alpha x+\beta$, która dotyka wykresu $f$ w~punkcie
+$x_0$. Warunki
+\[
+	L(x_0)=f(x_0),\qquad L'(x_0)=f'(x_0)
+\]
+dają jedyną kandydatkę:
+\[
+	L(x)=f(x_0)+f'(x_0)(x-x_0).
+\]
+Jeśli potrafimy wykazać, że $f(x)\geqslant L(x)$ w~całej \textbf{dopuszczalnej
+dziedzinie}, to po zsumowaniu znika cała trudność:
+\[
+	\sum_{i=1}^n f(x_i)
+	\geqslant
+	\alpha\sum_{i=1}^n x_i+n\beta
+	=\alpha S+n\beta=nf(x_0).
+\]
+
+\subsection{Styczna podpierająca i nierówność Jensena}
+
+\begin{theorem}[prosta podpierająca]
+	Niech $f$ będzie dwukrotnie różniczkowalna na przedziale $I$.
+	Jeżeli $f''(x)\geqslant0$ dla $x\in I$, to dla dowolnego $x_0\in I$
+	\[
+		f(x)\geqslant f(x_0)+f'(x_0)(x-x_0)
+		\qquad (x\in I).
+	\]
+	Dla $f''\leqslant0$ znak nierówności odwraca się.
+\end{theorem}
+\begin{proof}
+	Załóżmy $f''\geqslant0$. Wtedy $f'$ jest niemalejąca. Dla $x>x_0$ mamy
+	\[
+		f(x)-f(x_0)=\int_{x_0}^{x}f'(t)\,dt
+		\geqslant f'(x_0)(x-x_0).
+	\]
+	Dla $x<x_0$ całkujemy w~przeciwną stronę i~otrzymujemy tę samą nierówność.
+	Przypadek wklęsły stosujemy do funkcji $-f$.
+\end{proof}
+
+\begin{theorem}[nierówność Jensena]
+	Niech $f$ będzie różniczkowalną funkcją wypukłą na przedziale $I$, niech
+	$x_1,\dots,x_n\in I$ oraz niech $\lambda_1,\dots,\lambda_n\geqslant0$
+	spełniają $\lambda_1+\dots+\lambda_n=1$. Wtedy
+	\[
+		f\left(\lambda_1x_1+\dots+\lambda_nx_n\right)
+		\leqslant
+		\lambda_1f(x_1)+\dots+\lambda_nf(x_n).
+	\]
+	W~szczególności, dla równych wag,
+	\[
+		f\left(\frac{x_1+\dots+x_n}{n}\right)
+		\leqslant\frac{f(x_1)+\dots+f(x_n)}{n}.
+	\]
+	Jeżeli $f$ jest wklęsła, oba znaki nierówności odwracają się.
+\end{theorem}
+\begin{proof}
+	Oznaczmy $x_0=\lambda_1x_1+\dots+\lambda_nx_n$. Styczna podpierająca
+	w~punkcie $x_0$ daje
+	\[
+		f(x_i)\geqslant f(x_0)+f'(x_0)(x_i-x_0).
+	\]
+	Mnożymy te nierówności przez $\lambda_i$ i~sumujemy. Składniki liniowe
+	zerują się, ponieważ $\sum_i\lambda_i(x_i-x_0)=0$, więc otrzymujemy
+	$\sum_i\lambda_if(x_i)\geqslant f(x_0)$.
+\end{proof}
+
+Jensen jest więc zsumowaną nierównością dla stycznych podpierających.
+
+\begin{example}\label{E1}
+	Niech $x_1,\dots,x_n>0$ oraz $x_1+\dots+x_n=n$. Udowodnij, że
+	\[
+		\frac1{x_1}+\dots+\frac1{x_n}\geqslant n.
+	\]
+\end{example}
+\begin{solution*}[\ref{E1}]
+	Funkcja $f(x)=1/x$ jest wypukła, a~jej styczna w~punkcie $x_0=1$ ma
+	równanie $L(x)=2-x$. Zatem
+	\[
+		\frac1x\geqslant2-x,
+	\]
+	co jest równoważne nierówności $(x-1)^2/x\geqslant0$. Po zsumowaniu
+	dostajemy tezę.
+\end{solution*}
+
+\subsection{Jak znaleźć punkt styczności}
+
+W~praktyce działamy w~następującej kolejności:
+\begin{enumerate}
+	\item normalizujemy warunek, najczęściej do $x_1+\dots+x_n=n$ albo $1$;
+	\item zgadujemy przypadek równości;
+	\item grupujemy wyrażenie jako sumę wartości jednej funkcji;
+	\item liczymy styczną w~punkcie równości;
+	\item sprawdzamy znak różnicy, \textbf{pamiętając o~dziedzinie};
+	\item dopiero na końcu sumujemy oszacowania.
+\end{enumerate}
+
+\subsection{Jak zgadnąć styczną bez pochodnej}
+
+Niech $x_0$ będzie przewidywanym punktem równości i~niech
+$L(x)=Ax+B$. Jeżeli $L$ jest prostą podpierającą, to różnica
+$f(x)-L(x)$ zeruje się w~$x_0$, ale nie zmienia tam znaku. Po
+sprowadzeniu tej różnicy do wspólnego mianownika (o~stałym znaku)
+jej licznik powinien więc mieć pierwiastek co najmniej podwójny, czyli
+czynnik $(x-x_0)^2$. Jest to algebraiczny odpowiednik warunków
+$L(x_0)=f(x_0)$ oraz $L'(x_0)=f'(x_0)$.
+
+Na przykład dla $f(x)=1/x$ i~$x_0=1$ szukamy $L(x)=A+Bx$ z~tożsamości
+\[
+	1-x(A+Bx)=C(x-1)^2.
+\]
+Porównanie współczynników daje $C=1$, $A=2$, $B=-1$, a~więc
+\[
+	L(x)=2-x,\qquad
+	\frac1x-(2-x)=\frac{(x-1)^2}{x}\geqslant0.
+\]
+Podobnie, aby znaleźć górną styczną do $f(x)=x/(1+x)$ w~punkcie $1$,
+układamy
+\[
+	(Ax+B)(1+x)-x=C(x-1)^2.
+\]
+Stąd $A=B=C=1/4$, zatem $L(x)=(x+1)/4$.
+
+Wymuszenie kwadratu znajduje jedynie \emph{kandydatkę} na styczną.
+Trzeba jeszcze sprawdzić znak całej różnicy w~pełnej dziedzinie zadania.
+Dla punktu brzegowego albo funkcji niegładkiej argument z~czynnikiem
+kwadratowym nie musi działać.
+
+\newpage
+\section{Zadania}
+
+\begin{problem}\label{Z1}
+	Niech $x_1,\dots,x_n\geqslant0$ oraz $x_1+\dots+x_n=n$. Wykaż, że
+	\[
+		\sum_{i=1}^n\frac{x_i}{1+x_i}\leqslant\frac n2.
+	\]
+	Wskaż przypadek równości.
+\end{problem}
+
+\begin{problem}\label{Z2}
+	Niech $x_1,\dots,x_n>0$ oraz $x_1+\dots+x_n=n$. Udowodnij, że
+	\[
+		\sum_{i=1}^n\frac1{x_i^2+x_i+1}\geqslant\frac n3.
+	\]
+\end{problem}
+
+\begin{problem}\label{ZKwadratWazony}
+	Niech $a,b,c>0$. Udowodnij, że
+	\[
+		a(a+b-c)^2+b(b+c-a)^2+c(c+a-b)^2
+		\geqslant\frac{(a^2+b^2+c^2)^2}{a+b+c}.
+	\]
+	Wyznacz przypadek równości.
+\end{problem}
+
+\begin{problem}\label{Z6}
+	Udowodnij, że dla każdej liczby naturalnej $n\geqslant2$ zachodzi
+	\[
+		n!<\left(\frac{n+1}{2}\right)^n.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z8}
+	Niech $x_1,\dots,x_n>0$ oraz $x_1+\dots+x_n=1$. Udowodnij, że
+	\[
+		\prod_{i=1}^n\left(1+\frac1{x_i}\right)\geqslant(n+1)^n.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z9}
+	Niech $a,b,c>0$. Udowodnij, że
+	\[
+		\left(\frac{2a}{b+c}\right)^{\!2/3}
+		+\left(\frac{2b}{c+a}\right)^{\!2/3}
+		+\left(\frac{2c}{a+b}\right)^{\!2/3}\geqslant3.
+	\]
+\end{problem}
+
+\begin{problem}\label{ZIloczynyJensen}
+	Niech $n\geqslant2$ oraz $a_1,\dots,a_n\in(0,1/2)$. Udowodnij, że
+	\[
+		\frac{\prod_{i=1}^n a_i}
+		{\left(\sum_{i=1}^n a_i\right)^n}
+		\leqslant
+		\frac{\prod_{i=1}^n(1-a_i)}
+		{\left(\sum_{i=1}^n(1-a_i)\right)^n}.
+	\]
+	Wyznacz przypadek równości.
+\end{problem}
+
+\begin{problem}\label{ZE2}
+	Niech $a,b,c\geqslant-\frac34$ oraz $a+b+c=1$. Udowodnij, że
+	\[
+		\frac{a}{a^2+1}+\frac{b}{b^2+1}+\frac{c}{c^2+1}
+		\leqslant\frac9{10}.
+	\]
+\end{problem}
+
+\begin{problem}\label{ZKatyCosinusy}
+	Niech $\alpha,\beta,\gamma$ będą miarami kątów trójkąta. Udowodnij, że
+	\[
+		\cos\alpha+\cos\beta+\cos\gamma
+		\geqslant12\cos\alpha\cos\beta\cos\gamma.
+	\]
+	Wyznacz przypadek równości.
+\end{problem}
+
+\begin{problem}\label{Z11}
+	Niech $x_1,\dots,x_n>1$. Udowodnij, że
+	\[
+		\sum_{i=1}^n x_i+\frac{n}{\sqrt[n]{x_1\cdots x_n}}
+		\geqslant
+		\sum_{i=1}^n\frac1{x_i}+n\sqrt[n]{x_1\cdots x_n}.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z10}
+	Niech $a,b,c>0$ oraz $a^3+b^3+c^3=3$. Udowodnij, że
+	\[
+		\frac1{3-2a}+\frac1{3-2b}+\frac1{3-2c}\geqslant3.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z14}
+	Niech $a,b,c>0$. Udowodnij, że
+	\[
+		\frac{(b+c-a)^2}{(b+c)^2+a^2}
+		+\frac{(c+a-b)^2}{(c+a)^2+b^2}
+		+\frac{(a+b-c)^2}{(a+b)^2+c^2}
+		\geqslant\frac35.
+	\]
+\end{problem}
+
+\begin{problem}\label{ZRaviJensen}
+	Niech $a,b,c$ będą długościami boków trójkąta. Udowodnij, że
+	\[
+		a^2b(a-b)+b^2c(b-c)+c^2a(c-a)\geqslant0.
+	\]
+	Wyznacz przypadek równości.
+\end{problem}
+
+\begin{problem}\label{Z12}
+	Niech $a,b,c>0$ oraz
+	\[
+		57a+88b+125c\geqslant1148.
+	\]
+	Wyznacz najmniejszą możliwą wartość wyrażenia
+	\[
+		a^3+b^3+c^3+5a^2+5b^2+5c^2.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z13}
+	Niech $a,b,c>0$ oraz $a+b+c=3$. Udowodnij, że
+	\[
+		18\sum_{\rm cyc}\frac1{(3-a)(4-a)}+2(ab+bc+ca)\geqslant15.
+	\]
+\end{problem}
+
+\begin{problem}\label{ZHomoJensen}
+	Niech $a,b,c>0$ oraz
+	\[
+		\frac1a+\frac1b+\frac1c=a+b+c.
+	\]
+	Udowodnij, że
+	\[
+		\frac1{(2a+b+c)^2}+\frac1{(a+2b+c)^2}
+		+\frac1{(a+b+2c)^2}\leqslant\frac3{16}.
+	\]
+\end{problem}
+
+\begin{problem}\label{Z15}
+	Niech $n\geqslant4$, $a_1,\dots,a_n\geqslant0$ oraz
+	$a_1+\dots+a_n=2$. Wyznacz najmniejszą możliwą wartość wyrażenia
+	\[
+		\frac{a_1}{1+a_2^2}+\frac{a_2}{1+a_3^2}
+		+\dots+\frac{a_n}{1+a_1^2}.
+	\]
+\end{problem}
+
+\ifshowsolutions
+\newpage
+\section{Wskazówki}
+
+\begin{hint*}[\ref{Z1}]
+	Porównaj $f(x)=x/(1+x)$ z~jej styczną w~punkcie $1$.
+\end{hint*}
+
+\begin{hint*}[\ref{Z2}]
+	Punkt równości to $1$. Odejmij od funkcji $1/(x^2+x+1)$ jej styczną
+	w~tym punkcie i~rozłóż różnicę na czynniki.
+\end{hint*}
+
+\begin{hint*}[\ref{ZKwadratWazony}]
+	Zastosuj ważoną nierówność Jensena do funkcji $f(x)=x^2$, przyjmując
+	wagi proporcjonalne do $a,b,c$.
+\end{hint*}
+
+\begin{hint*}[\ref{Z6}]
+	Zastosuj ścisłą wklęsłość $\log t$ do liczb $1,2,\dots,n$.
+\end{hint*}
+
+\begin{hint*}[\ref{Z8}]
+	Zastosuj Jensena do wypukłej funkcji
+	$f(t)=\log(1+1/t)$.
+\end{hint*}
+
+\begin{hint*}[\ref{Z9}]
+	Po normalizacji $a+b+c=1$ wykaż punktowo
+	$\left(2t/(1-t)\right)^{2/3}\geqslant3t$.
+\end{hint*}
+
+\begin{hint*}[\ref{ZIloczynyJensen}]
+	Zastosuj Jensena do funkcji
+	$f(x)=\log\frac{x}{1-x}$ na przedziale $(0,1/2)$.
+\end{hint*}
+
+\begin{hint*}[\ref{ZE2}]
+	Dla $f(x)=x/(x^2+1)$ zapisz styczną w~punkcie $1/3$ i~sprawdź jej
+	położenie względem wykresu na całym przedziale $[-3/4,\infty)$.
+\end{hint*}
+
+\begin{hint*}[\ref{ZKatyCosinusy}]
+	Dla trójkąta ostrokątnego najpierw ogranicz
+	$\cos\alpha\cos\beta\cos\gamma$ za pomocą wklęsłości funkcji
+	$\log(\cos x)$, a~następnie użyj AM--GM.
+\end{hint*}
+
+\begin{hint*}[\ref{Z11}]
+	Podstaw $u_i=\log x_i$ i~zastosuj Jensena do funkcji
+	$f(u)=e^u-e^{-u}$ na $(0,\infty)$.
+\end{hint*}
+
+\begin{hint*}[\ref{Z10}]
+	Najpierw sprawdź, że wszystkie mianowniki są dodatnie. Podstaw $u=x^3$
+	i~porównaj funkcję $1/(3-2\sqrt[3]{u})$ z~jej styczną w~punkcie $u=1$.
+\end{hint*}
+
+\begin{hint*}[\ref{Z14}]
+	Znormalizuj $a+b+c=1$ i~zapisz każdy składnik w~postaci
+	$2-1/(2a^2-2a+1)$. Potem użyj stycznej w~punkcie $1/3$.
+\end{hint*}
+
+\begin{hint*}[\ref{ZRaviJensen}]
+	Zastosuj podstawienie
+	$a=y+z$, $b=z+x$, $c=x+y$. Po uproszczeniu użyj ważonego Jensena
+	dla funkcji $f(t)=t^2$.
+\end{hint*}
+
+\begin{hint*}[\ref{Z12}]
+	Dla $f(x)=x^3+5x^2$ zapisz styczne w~punktach $3$, $4$ i~$5$.
+	Ich współczynniki kierunkowe występują wprost w~założeniu.
+\end{hint*}
+
+\begin{hint*}[\ref{Z13}]
+	Zastąp $2(ab+bc+ca)$ wyrażeniem z~$a^2+b^2+c^2$, a~następnie
+	zastosuj styczną w~punkcie $1$ do otrzymanej funkcji jednej zmiennej.
+\end{hint*}
+
+\begin{hint*}[\ref{ZHomoJensen}]
+	Oznacz $s=a+b+c$ i~najpierw ujednorodnij nierówność, mnożąc jej
+	lewą stronę przez $s^2$, a~prawą zastępując przez
+	$\frac3{16}s(1/a+1/b+1/c)$. Potem przyjmij $s=3$ i~zastosuj Jensena
+	do odpowiedniej funkcji jednej zmiennej.
+\end{hint*}
+
+\begin{hint*}[\ref{Z15}]
+	Najpierw wykaż dla $x\geqslant0$ oszacowanie
+	\[
+		\frac1{1+x^2}\geqslant1-\frac x2.
+	\]
+	Następnie udowodnij, że
+	$\sum_{i=1}^n a_ia_{i+1}\leqslant1$, gdzie indeksy rozumiemy cyklicznie.
+\end{hint*}
+
+\newpage
+\section{Rozwiązania}
+
+\begin{solution*}[\ref{Z1}]
+	Dla $f(x)=x/(1+x)$ styczna w~punkcie $1$ ma postać
+	$L(x)=(x+1)/4$. Różnica
+	\[
+		L(x)-f(x)=\frac{(x-1)^2}{4(1+x)}\geqslant0.
+	\]
+	Sumując, dostajemy
+	\[
+		\sum_{i=1}^n\frac{x_i}{1+x_i}
+		\leqslant\frac14\sum_{i=1}^n(x_i+1)=\frac n2.
+	\]
+	Równość zachodzi dokładnie dla $x_1=\dots=x_n=1$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z2}]
+	Punkt równości to $x=1$. Styczna do $f(x)=1/(x^2+x+1)$ w~tym punkcie
+	ma równanie $L(x)=(2-x)/3$. Kluczowa faktoryzacja brzmi
+	\[
+		\frac1{x^2+x+1}-\frac{2-x}{3}
+		=\frac{(x-1)^2(x+1)}{3(x^2+x+1)}\geqslant0.
+	\]
+	Po zsumowaniu prawych stron otrzymujemy
+	$\frac13(2n-\sum x_i)=n/3$.
+\end{solution*}
+
+\begin{solution*}[\ref{ZKwadratWazony}]
+	Oznaczmy $s=a+b+c$. Z~ważonej nierówności Jensena dla funkcji
+	$f(x)=x^2$ otrzymujemy
+	\[
+		\frac{a}{s}(a+b-c)^2+\frac{b}{s}(b+c-a)^2
+		+\frac{c}{s}(c+a-b)^2
+		\geqslant
+		\left(
+			\frac{a(a+b-c)+b(b+c-a)+c(c+a-b)}{s}
+		\right)^2.
+	\]
+	Wyrażenie w~liczniku po prawej stronie upraszcza się do
+	$a^2+b^2+c^2$. Po pomnożeniu przez $s$ dostajemy tezę.
+	Równość zachodzi wtedy i~tylko wtedy, gdy
+	\[
+		a+b-c=b+c-a=c+a-b,
+	\]
+	czyli gdy $a=b=c$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z6}]
+	Funkcja $\log t$ jest ściśle wklęsła. Jensen zastosowany do liczb
+	$1,2,\dots,n$ daje
+	\[
+		\frac1n\sum_{k=1}^n\log k
+		<\log\left(\frac1n\sum_{k=1}^n k\right)
+		=\log\frac{n+1}{2}.
+	\]
+	Nierówność jest ostra, bo dla $n\geqslant2$ liczby nie są wszystkie równe.
+	Po eksponencjacji otrzymujemy tezę.
+\end{solution*}
+
+\begin{solution*}[\ref{Z8}]
+	Dla $t>0$ funkcja
+	\[
+		f(t)=\log\left(1+\frac1t\right)
+	\]
+	jest wypukła, ponieważ
+	\[
+		f''(t)=\frac{2t+1}{t^2(t+1)^2}>0.
+	\]
+	Z~nierówności Jensena
+	\[
+		\frac1n\sum_{i=1}^n\log\left(1+\frac1{x_i}\right)
+		\geqslant
+		\log\left(1+\frac1{(x_1+\dots+x_n)/n}\right)
+		=\log(n+1).
+	\]
+	Eksponencjacja kończy dowód. Równość zachodzi dla
+	$x_1=\dots=x_n=1/n$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z9}]
+	Oznaczmy $s=a+b+c$ oraz $x=a/s$, $y=b/s$, $z=c/s$. Wtedy
+	$x+y+z=1$. Rozważmy
+	\[
+		f(t)=\left(\frac{2t}{1-t}\right)^{2/3}
+		\qquad(0<t<1).
+	\]
+	Styczna w~punkcie $t_0=1/3$ ma równanie $L(t)=3t$. Jest ona prostą
+	podpierającą, ponieważ nierówność $f(t)\geqslant3t$ jest równoważna
+	\[
+		4-27t(1-t)^2=(3t-1)^2(4-3t)\geqslant0.
+	\]
+	Zatem
+	\[
+		\sum_{\rm cyc}\left(\frac{2a}{b+c}\right)^{2/3}
+		=f(x)+f(y)+f(z)\geqslant3(x+y+z)=3.
+	\]
+	Równość zachodzi dla $a=b=c$.
+\end{solution*}
+
+\begin{solution*}[\ref{ZIloczynyJensen}]
+	Na przedziale $(0,1/2)$ funkcja
+	\[
+		f(x)=\log\frac{x}{1-x}
+	\]
+	jest ściśle wklęsła, ponieważ
+	\[
+		f''(x)=\frac{2x-1}{x^2(1-x)^2}<0.
+	\]
+	Oznaczmy $\overline a=(a_1+\dots+a_n)/n$. Z~nierówności Jensena
+	\[
+		\frac1n\sum_{i=1}^n\log\frac{a_i}{1-a_i}
+		\leqslant
+		\log\frac{\overline a}{1-\overline a}
+		=
+		\log\frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n(1-a_i)}.
+	\]
+	Po pomnożeniu przez $n$, potęgowaniu i~przestawieniu czynników
+	otrzymujemy dokładnie tezę. Ze ścisłej wklęsłości wynika, że równość
+	zachodzi wtedy i~tylko wtedy, gdy $a_1=\dots=a_n$.
+\end{solution*}
+
+\begin{solution*}[\ref{ZE2}]
+	Dla $f(x)=x/(x^2+1)$ równość sugeruje punkt $x_0=1/3$. Styczna ma
+	równanie
+	\[
+		L(x)=\frac{18}{25}x+\frac3{50}.
+	\]
+	Nie musimy badać znaku $f''$. Bezpośrednio
+	\[
+		L(x)-f(x)
+		=\frac{(3x-1)^2(4x+3)}{50(x^2+1)}\geqslant0
+		\qquad\left(x\geqslant-\frac34\right).
+	\]
+	Po zsumowaniu trzech oszacowań otrzymujemy
+	\[
+		\sum_{\rm cyc}f(a)
+		\leqslant\frac{18}{25}(a+b+c)+3\cdot\frac3{50}
+		=\frac9{10}.
+	\]
+	Ograniczenie dziedziny jest dokładnie tym, co czyni styczną podpierającą.
+\end{solution*}
+
+\begin{solution*}[\ref{ZKatyCosinusy}]
+	Jeżeli trójkąt nie jest ostrokątny, to prawa strona jest niedodatnia,
+	natomiast
+	\[
+		\cos\alpha+\cos\beta+\cos\gamma
+		=1+4\sin\frac\alpha2\sin\frac\beta2\sin\frac\gamma2>0.
+	\]
+	Możemy więc założyć, że wszystkie trzy kąty są ostre, i~oznaczyć
+	$p=\cos\alpha\cos\beta\cos\gamma>0$. Funkcja
+	$f(x)=\log(\cos x)$ jest ściśle wklęsła na $(0,\pi/2)$, zatem Jensen
+	daje
+	\[
+		\frac13\log p
+		\leqslant
+		\log\left(\cos\frac{\alpha+\beta+\gamma}{3}\right)
+		=\log\frac12.
+	\]
+	Stąd $p\leqslant1/8$. Z~nierówności AM--GM oraz
+	$p^{2/3}\leqslant1/4$ otrzymujemy
+	\[
+		\cos\alpha+\cos\beta+\cos\gamma
+		\geqslant3p^{1/3}
+		\geqslant12p.
+	\]
+	Równość zachodzi dokładnie dla
+	$\alpha=\beta=\gamma=\pi/3$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z11}]
+	Oznaczmy $u_i=\log x_i>0$ oraz
+	\[
+		\overline u=\frac{u_1+\dots+u_n}{n},
+		\qquad G=e^{\overline u}=\sqrt[n]{x_1\cdots x_n}.
+	\]
+	Funkcja $f(u)=e^u-e^{-u}$ jest wypukła na $(0,\infty)$, gdyż
+	$f''(u)=e^u-e^{-u}>0$. Zatem Jensen daje
+	\[
+		\sum_{i=1}^n\left(x_i-\frac1{x_i}\right)
+		=\sum_{i=1}^n f(u_i)
+		\geqslant nf(\overline u)
+		=n\left(G-\frac1G\right).
+	\]
+	Po przeniesieniu składników otrzymujemy tezę.
+\end{solution*}
+
+\begin{solution*}[\ref{Z10}]
+	Z~warunku mamy $a,b,c<\sqrt[3]{3}<3/2$, zatem wszystkie mianowniki
+	w~tezie są dodatnie. Dla $0<x<3/2$ zachodzi oszacowanie
+	\[
+		\frac1{3-2x}\geqslant\frac13+\frac23x^3.
+	\]
+	Jest to styczna w~punkcie $u=1$ do funkcji
+	$g(u)=1/(3-2\sqrt[3]{u})$. Potrzebny znak można też sprawdzić bez
+	badania wypukłości:
+	\[
+		\frac1{3-2x}-\left(\frac13+\frac23x^3\right)
+		=\frac{2x(x-1)^2(2x+1)}{3(3-2x)}\geqslant0.
+	\]
+	Stosując tę nierówność kolejno do $a,b,c$, otrzymujemy
+	\[
+		\frac1{3-2a}+\frac1{3-2b}+\frac1{3-2c}
+		\geqslant1+\frac23(a^3+b^3+c^3)=3.
+	\]
+	Równość zachodzi dla $a=b=c=1$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z14}]
+	Nierówność jest jednorodna, więc zakładamy $a+b+c=1$. Wtedy pierwszy
+	składnik ma postać
+	\[
+		\frac{(1-2a)^2}{(1-a)^2+a^2}
+		=2-\frac1{2a^2-2a+1}.
+	\]
+	Wystarczy zatem wykazać
+	\[
+		\sum_{\rm cyc}\frac1{2a^2-2a+1}\leqslant\frac{27}{5}.
+	\]
+	Dla $f(x)=1/(2x^2-2x+1)$ styczna w~punkcie $x_0=1/3$ ma równanie
+	\[
+		L(x)=\frac{54}{25}x+\frac{27}{25}.
+	\]
+	Co ważniejsze, dla $x>0$
+	\[
+		f(x)-L(x)
+		=-\frac{2(3x-1)^2(6x+1)}{25(2x^2-2x+1)}\leqslant0.
+	\]
+	Sumujemy oszacowania:
+	\[
+		\sum_{\rm cyc}f(a)
+		\leqslant\frac{54}{25}(a+b+c)+3\cdot\frac{27}{25}
+		=\frac{27}{5}.
+	\]
+	Po cofnięciu przekształcenia otrzymujemy tezę. Równość zachodzi dla
+	$a=b=c$.
+\end{solution*}
+
+\begin{solution*}[\ref{ZRaviJensen}]
+	Z~nierówności trójkąta istnieją liczby $x,y,z>0$ takie, że
+	\[
+		a=y+z,\qquad b=z+x,\qquad c=x+y.
+	\]
+	Po podstawieniu i~uproszczeniu teza jest równoważna nierówności
+	\[
+		x^3z+y^3x+z^3y\geqslant xyz(x+y+z),
+	\]
+	a~po podzieleniu przez $xyz>0$ nierówności
+	\[
+		\frac{x^2}{y}+\frac{y^2}{z}+\frac{z^2}{x}\geqslant x+y+z.
+	\]
+	Stosujemy ważonego Jensena do wypukłej funkcji $f(t)=t^2$, z~wagami
+	$y,z,x$:
+	\begin{align*}
+		yf\left(\frac{x}{y}\right)
+		+zf\left(\frac{y}{z}\right)
+		+xf\left(\frac{z}{x}\right)
+		&\geqslant(x+y+z)
+		f\left(\frac{x+y+z}{x+y+z}\right)\\
+		&=x+y+z.
+	\end{align*}
+	Równość zachodzi wtedy i~tylko wtedy, gdy
+	$x/y=y/z=z/x=1$, czyli $x=y=z$, co jest równoważne warunkowi
+	$a=b=c$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z12}]
+	Rozważmy wypukłą na $(0,\infty)$ funkcję $f(x)=x^3+5x^2$.
+	Jej pochodna ma postać $f'(x)=3x^2+10x$. Styczne odpowiednio
+	w~punktach $3$, $4$ i~$5$ dają oszacowania
+	\[
+		f(a)\geqslant57a-99,\qquad
+		f(b)\geqslant88b-208,\qquad
+		f(c)\geqslant125c-375.
+	\]
+	Po zsumowaniu i~wykorzystaniu założenia otrzymujemy
+	\[
+		f(a)+f(b)+f(c)
+		\geqslant57a+88b+125c-682
+		\geqslant466.
+	\]
+	Dla $(a,b,c)=(3,4,5)$ założenie zachodzi z~równością, a~badane
+	wyrażenie jest równe $72+144+250=466$. Szukane minimum wynosi więc
+	$466$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z13}]
+	Ponieważ $a^2+b^2+c^2=9-2(ab+bc+ca)$, lewa strona jest równa
+	\[
+		9+\sum_{\rm cyc}\left(\frac{18}{(3-a)(4-a)}-a^2\right).
+	\]
+	Styczna w~punkcie $x_0=1$ do funkcji
+	$f(x)=18/((3-x)(4-x))-x^2$ ma równanie $L(x)=(x+3)/2$. Dla
+	$0<x<3$ mamy dokładnie
+	\[
+		f(x)-L(x)
+		=\frac{x(x-1)^2(9-2x)}{2(3-x)(4-x)}\geqslant0.
+	\]
+	Sumując, otrzymujemy $9+\frac12((a+b+c)+9)=15$.
+	Równość zachodzi dla $a=b=c=1$.
+\end{solution*}
+
+\begin{solution*}[\ref{ZHomoJensen}]
+	Oznaczmy $s=a+b+c$. Korzystając z~założenia, możemy równoważnie
+	udowodnić jednorodną nierówność
+	\[
+		\sum_{\rm cyc}\frac{s^2}{(s+a)^2}
+		\leqslant\frac3{16}s\left(\frac1a+\frac1b+\frac1c\right).
+	\]
+	Możemy więc przyjąć $s=3$. Po podzieleniu obu stron przez $9$
+	wystarczy wykazać
+	\[
+		\sum_{\rm cyc}\left(\frac{16}{(a+3)^2}-\frac1a\right)\leqslant0,
+		\qquad a+b+c=3.
+	\]
+	Rozważmy funkcję
+	\[
+		f(x)=\frac{16}{(x+3)^2}-\frac1x
+		\qquad(0<x\leqslant3).
+	\]
+	Mamy $f(1)=0$ oraz
+	\[
+		f''(x)=\frac{96}{(x+3)^4}-\frac2{x^3}\leqslant0.
+	\]
+	Ostatnia nierówność jest równoważna
+	\[
+		(x+3)^4-48x^3
+		=(x-3)(x^3-33x^2-45x-27)\geqslant0,
+	\]
+	co zachodzi dla $0<x\leqslant3$. Z~wklęsłości funkcji $f$ i~nierówności
+	Jensena otrzymujemy
+	\[
+		f(a)+f(b)+f(c)
+		\leqslant3f\left(\frac{a+b+c}{3}\right)=3f(1)=0.
+	\]
+	Równość w~wyjściowym zadaniu zachodzi dla $a=b=c=1$.
+\end{solution*}
+
+\begin{solution*}[\ref{Z15}]
+	Dla każdego $x\geqslant0$ zachodzi
+	\[
+		\frac1{1+x^2}\geqslant1-\frac x2,
+	\]
+	ponieważ
+	\[
+		\frac1{1+x^2}-\left(1-\frac x2\right)
+		=\frac{x(x-1)^2}{2(1+x^2)}\geqslant0.
+	\]
+	Przyjmijmy $a_{n+1}=a_1$ i~oznaczmy
+	$Q=\sum_{i=1}^n a_ia_{i+1}$. Pokażemy najpierw, że $Q\leqslant1$.
+	Na zwartym zbiorze $a_i\geqslant0$, $\sum a_i=2$ funkcja $Q$ osiąga
+	maksimum. Spośród punktów maksymalizujących wybierzmy taki, który ma
+	najmniej dodatnich współrzędnych.
+
+	Gdyby dwie dodatnie współrzędne $a_p,a_q$ nie sąsiadowały ze sobą
+	w~cyklu, moglibyśmy pozostawić ich sumę bez zmian i~przenieść ją w~całości
+	do jednej z~nich. Wyrażenie $Q$ jest przy takim przesunięciu funkcją
+	liniową, więc jeden z~końców przedziału nie zmniejsza jego wartości.
+	Otrzymalibyśmy maksimum z~mniejszą liczbą dodatnich współrzędnych,
+	sprzecznie z~wyborem. Wszystkie dodatnie współrzędne muszą więc parami
+	sąsiadować. W~cyklu długości co najmniej $4$ mogą być najwyżej dwie.
+	Jeśli mają wartości $x,y$, to
+	\[
+		Q=xy\leqslant\left(\frac{x+y}{2}\right)^2=1.
+	\]
+	Korzystając teraz z~oszacowania jednowymiarowego, dostajemy
+	\[
+		\sum_{i=1}^n\frac{a_i}{1+a_{i+1}^2}
+		\geqslant\sum_{i=1}^na_i\left(1-\frac{a_{i+1}}2\right)
+		=2-\frac Q2\geqslant\frac32.
+	\]
+	Dla $(a_1,a_2,a_3,\dots,a_n)=(1,1,0,\dots,0)$ otrzymujemy wartość
+	$3/2$, zatem jest ona szukanym minimum.
+\end{solution*}
+
+\fi
+
+\end{document}

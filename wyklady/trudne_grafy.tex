@@ -1,0 +1,823 @@
+\documentclass{lecture-kuznia}
+\usepackage{comment}
+
+\def\data{01.10.2026}
+\def\place{Poręba Wielka}
+\def\title{Zaawansowane grafy}
+\def\group{Finaliści}
+\def\author{Autor: Stefan Świerczewski}
+\def\lecturer{Prowadzący: Stefan Świerczewski}
+
+\ifshowsolutions
+\ExplSyntaxOn
+\tl_new:N \g_trudne_grafy_rozwiazania_tl
+\newcounter{rozwiazanie}
+\NewDocumentEnvironment{solutionbox}{+b}{
+	\tl_gput_right:Nn \g_trudne_grafy_rozwiazania_tl {
+		\par\medskip
+		\stepcounter{rozwiazanie}
+		\begingroup\color{black!85}
+		\emergencystretch=1em
+		\noindent\textbf{Rozwiązanie~\therozwiazanie.}\quad\allowbreak #1
+		\hfill$\blacksquare$\par\medskip
+		\endgroup
+	}
+}{}
+\NewDocumentCommand{\drukujrozwiazania}{}{
+	\tl_use:N \g_trudne_grafy_rozwiazania_tl
+}
+\ExplSyntaxOff
+\else
+\excludecomment{solutionbox}
+\newcommand{\drukujrozwiazania}{}
+\fi
+
+\newenvironment{theoryproof}{\begin{proof}}{\end{proof}}
+
+\newcounter{zadanie}
+\newenvironment{zadanie}[1]{%
+	\refstepcounter{zadanie}%
+	\par\medskip\noindent
+	\textbf{Zadanie \thezadanie.}\quad
+}{\par\medskip}
+
+\newcommand{\degG}[1]{\deg(#1)}
+\newcommand{\AoPSGraphs}{\href{https://services.artofproblemsolving.com/download.php?id=YXR0YWNobWVudHMvZS9lL2JhMjY3OGNlODZjMTYyZmZjOWMwNTdiMWQ0MTIyNzFiZGEzMzJkLnBkZg==\&rn=T2x5bXBpYWRDb21iaW5hdG9yaWNzQ2hhcHRlcjgucGRm}{AoPS: Pranav Sriram, \textit{Olympiad Combinatorics --- Graph Theory}}}
+
+\begin{document}
+
+\begin{center}
+  {\Huge\textbf{\title}}
+
+  \medskip
+  {\large 11 problemów o ekstremum, przeszukiwaniu i nierównościach}
+\end{center}
+
+\fontsize{12}{16}\selectfont
+
+\section{Narzędzia}
+
+\subsection*{Oznaczenia}
+
+\begingroup
+\renewcommand{\arraystretch}{1.18}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+	$V(G)$, $E(G)$
+	& odpowiednio zbiór wierzchołków i zbiór krawędzi grafu $G$;
+	piszemy $n=|V(G)|$ oraz $m=|E(G)|$;\\
+	$d_G(v)$ lub $d(v)$
+	& stopień wierzchołka $v$, czyli liczba jego sąsiadów;\\
+	$d^+(v)$, $d^-(v)$
+	& stopień wychodzący i stopień wchodzący w grafie skierowanym;\\
+	$\delta(G)$, $\Delta(G)$
+	& odpowiednio najmniejszy i największy stopień wierzchołka w $G$;\\
+	$\operatorname{avgdeg}(G)=2m/n$
+	& średni stopień w grafie; zawsze $\delta(G)\leqslant\operatorname{avgdeg}(G)
+		\leqslant\Delta(G)$;\\
+	$N(v)$, $N[v]$
+	& sąsiedztwo otwarte wierzchołka $v$ oraz sąsiedztwo domknięte
+	$N(v)\cup\{v\}$;\\
+	$N(X)$
+	& zbiór wierzchołków spoza $X$, które mają sąsiada w $X$;\\
+	$d(u,v)$, $S_i(v)$
+	& odległość między $u$ i $v$ oraz warstwa
+	$S_i(v)=\{x:d(v,x)=i\}$;\\
+	$G[X]$, $G-X$
+	& podgraf indukowany przez $X$ oraz graf po usunięciu wierzchołków $X$;\\
+	$\overline G$
+	& dopełnienie grafu $G$;\\
+	$\alpha(G)$, $\omega(G)$
+	& największy rozmiar odpowiednio zbioru niezależnego i kliki;\\
+	$\nu(G)$, $\tau(G)$
+	& największy rozmiar skojarzenia oraz najmniejszy rozmiar pokrycia
+	wierzchołkowego;\\
+	$\chi(G)$, $\operatorname{girth}(G)$
+	& liczba chromatyczna oraz długość najkrótszego cyklu;\\
+	$t_k(G)$
+	& liczba klik $K_k$ zawartych w $G$.
+\end{tabularx}
+\endgroup
+
+Jeżeli graf jest ustalony, indeks $G$ zwykle pomijamy. Symbol $d$ bez
+argumentu może też oznaczać pomocniczą liczbę całkowitą; z kontekstu będzie
+zawsze jasne, czy chodzi o parametr, czy o stopień $d(v)$.
+
+\subsection{Gęstość, rdzeń i długie ścieżki}
+
+\begin{lemma}[rdzeń o dużym stopniu]
+	Jeżeli $m\geqslant dn$, to $G$ zawiera niepusty podgraf $H$ o
+	$\delta(H)\geqslant d$.
+\end{lemma}
+
+\begin{theoryproof}
+	Usuwamy wierzchołki stopnia mniejszego niż $d$. Gdyby proces usunął cały
+	graf, każdą krawędź policzylibyśmy przy usunięciu jej pierwszego końca, a
+	łącznie usunęlibyśmy mniej niż $dn$ krawędzi.
+\end{theoryproof}
+
+\begin{theorem}[Erdős--Gallai]
+	Jeżeli graf na $n$ wierzchołkach nie zawiera ścieżki złożonej z $k$
+	krawędzi, to
+	\[
+		m\leqslant\frac{k-1}{2}n.
+	\]
+	W szczególności średni stopień większy niż $k-1$ wymusza ścieżkę długości
+	co najmniej $k$.
+\end{theorem}
+
+\begin{theoryproof}
+	Najpierw zauważmy, że każdy spójny graf o minimalnym stopniu $\delta$ ma
+	ścieżkę o co najmniej $\min\{n,2\delta+1\}$ wierzchołkach. Istotnie, niech
+	$P=v_1\ldots v_s$ będzie najdłuższą ścieżką. Jeżeli $s<n$, to nie istnieje
+	indeks $i$ taki, że jednocześnie
+	\[
+		v_1v_{i+1}\in E(G)
+		\qquad\text{i}\qquad
+		v_iv_s\in E(G).
+	\]
+	W przeciwnym razie wierzchołki $P$ tworzyłyby cykl, który dzięki spójności
+	grafu i istnieniu wierzchołka poza $P$ można byłoby otworzyć do dłuższej
+	ścieżki. Zbiory indeksów odpowiadające sąsiadom $v_1$ i $v_s$ są więc
+	rozłączne, skąd $s-1\geqslant d(v_1)+d(v_s)\geqslant2\delta$.
+
+	Dowodzimy teraz twierdzenia indukcyjnie po $n$. Dla grafu niespójnego
+	stosujemy założenie indukcyjne do każdej składowej i sumujemy otrzymane
+	oszacowania, możemy więc założyć spójność. Dla $n\leqslant k$ teza wynika z
+	$m\leqslant\binom n2\leqslant(k-1)n/2$. Niech zatem $n\geqslant k+1$.
+	Gdyby $\delta(G)>(k-1)/2$, powyższa obserwacja dałaby ścieżkę o co najmniej
+	$k+1$ wierzchołkach. Istnieje więc wierzchołek $v$ o
+	$d(v)\leqslant(k-1)/2$. Z założenia indukcyjnego
+	\[
+		m-d(v)\leqslant\frac{k-1}{2}(n-1),
+	\]
+	a po dodaniu $d(v)$ otrzymujemy żądane $m\leqslant(k-1)n/2$.
+\end{theoryproof}
+
+\subsection{Dwa oszacowania ekstremalne}
+
+Niech $T_r(n)$ oznacza pełny graf $r$-dzielny, którego części różnią się
+rozmiarami o co najwyżej $1$.
+
+\begin{theorem}[Turán]
+	Jeżeli $G$ nie zawiera kliki $K_{r+1}$, to
+	\[
+		m\leqslant e(T_r(n))
+		\leqslant\left(1-\frac1r\right)\frac{n^2}{2}.
+	\]
+	Pierwsza granica jest ostra i równość zachodzi dla grafu Turána $T_r(n)$.
+\end{theorem}
+
+\begin{theoryproof}
+	Oznaczmy $t_r(n)=e(T_r(n))$ i przeprowadźmy indukcję po $r+n$. Dla
+	$r\geqslant n$ teza jest oczywista, bo $t_r(n)=\binom n2$, a dla $r=1$
+	graf nie ma krawędzi. Zauważmy też, że spośród pełnych grafów $r$-dzielnych
+	najwięcej krawędzi ma ten o możliwie równych częściach: przeniesienie
+	wierzchołka z części większej do mniejszej zmniejsza liczbę par leżących w
+	jednej części. W szczególności $t_{r-1}(n)\leqslant t_r(n)$.
+
+	Jeżeli $G$ nie zawiera $K_r$, to z założenia indukcyjnego
+	$m\leqslant t_{r-1}(n)\leqslant t_r(n)$. W przeciwnym razie wybieramy klikę
+	$C\simeq K_r$. Każdy wierzchołek spoza $C$ ma w $C$ co najwyżej $r-1$
+	sąsiadów, gdyż $G$ nie zawiera $K_{r+1}$. Dlatego liczba krawędzi mających
+	co najmniej jeden koniec w $C$ nie przekracza
+	\[
+		\binom r2+(n-r)(r-1).
+	\]
+	Graf $G-C$ nadal nie zawiera $K_{r+1}$, więc indukcja daje
+	\[
+		m\leqslant t_r(n-r)+\binom r2+(n-r)(r-1)=t_r(n).
+	\]
+	Ostatnia równość wynika z usunięcia po jednym wierzchołku z każdej części
+	$T_r(n)$. Sam graf $T_r(n)$ nie zawiera $K_{r+1}$, zatem oszacowanie jest
+	ostre. Nierówność
+	$t_r(n)\leqslant(1-1/r)n^2/2$ wynika z
+	\[
+		t_r(n)=\frac12\left(n^2-\sum_{i=1}^r n_i^2\right)
+		\leqslant\frac12\left(n^2-\frac{n^2}{r}\right),
+	\]
+	gdzie $n_1+\dots+n_r=n$ są rozmiarami części.
+\end{theoryproof}
+
+Drugie oszacowanie zamienia lokalne stopnie na duży zbiór niezależny.
+
+\begin{theorem}[Caro--Wei]
+	Każdy graf $G$ spełnia
+	\[
+		\alpha(G)\geqslant
+		\sum_{v\in V(G)}\frac1{d(v)+1}
+		\geqslant\frac{n^2}{2m+n}.
+	\]
+\end{theorem}
+
+\begin{theoryproof}
+	Ustawiamy wierzchołki losowo i wybieramy $v$, gdy stoi przed wszystkimi
+	swoimi sąsiadami. Wybrane wierzchołki są niezależne, a $v$ zostaje wybrany
+	z prawdopodobieństwem $1/(d(v)+1)$. Pierwsza nierówność wynika z liniowości
+	wartości oczekiwanej, druga zaś z nierówności Cauchy'ego.
+\end{theoryproof}
+
+\subsection{Skojarzenia i dualność}
+
+\begin{theorem}[Hall]
+	Graf dwudzielny o częściach $A,B$ ma skojarzenie pokrywające $A$ wtedy i
+	tylko wtedy, gdy
+	\[
+		|N(X)|\geqslant|X|\qquad\text{dla każdego }X\subseteq A.
+	\]
+\end{theorem}
+
+\begin{theoryproof}
+	Konieczność jest natychmiastowa: różne wierzchołki $X\subseteq A$ są
+	skojarzone z różnymi wierzchołkami $N(X)$.
+
+	Dla dostateczności prowadzimy indukcję po $|A|$. Jeżeli dla każdego
+	niepustego, właściwego $X\subset A$ zachodzi mocniejsza nierówność
+	$|N(X)|\geqslant|X|+1$, wybieramy dowolną krawędź $ab$, usuwamy $a$ i $b$
+	i stosujemy indukcję. Usunięcie $b$ zmniejsza każde sąsiedztwo o co najwyżej
+	$1$, więc warunek Halla pozostaje spełniony.
+
+	W przeciwnym razie istnieje niepusty, właściwy $X\subset A$ taki, że
+	$|N(X)|=|X|$. Indukcja daje skojarzenie $X$ z całym $N(X)$. W grafie po
+	usunięciu $X\cup N(X)$ także zachodzi warunek Halla: gdyby dla pewnego
+	$Y\subseteq A\setminus X$ jego sąsiedztwo poza $N(X)$ miało mniej niż
+	$|Y|$ elementów, to
+	\[
+		|N(X\cup Y)|<|X|+|Y|,
+	\]
+	co przeczyłoby założeniu. Drugie skojarzenie, otrzymane indukcyjnie, pokrywa
+	$A\setminus X$. Suma obu skojarzeń pokrywa całe $A$.
+\end{theoryproof}
+
+\begin{theorem}[Kőnig]
+	W grafie dwudzielnym maksymalny rozmiar skojarzenia $\nu(G)$ jest równy
+	minimalnemu rozmiarowi pokrycia wierzchołkowego. Równoważnie,
+	\[
+		\alpha(G)+\nu(G)=n.
+	\]
+\end{theorem}
+
+\begin{theoryproof}
+	Niech $A,B$ będą częściami grafu, a $M$ --- skojarzeniem maksymalnego
+	rozmiaru. Zaczynamy we wszystkich nieskojarzonych wierzchołkach $A$ i
+	idziemy ścieżkami naprzemiennymi: z $A$ do $B$ krawędziami spoza $M$, a z
+	$B$ do $A$ krawędziami należącymi do $M$. Niech $Z$ będzie zbiorem
+	osiągniętych wierzchołków.
+
+	Zbiór
+	\[
+		C=(A\setminus Z)\cup(B\cap Z)
+	\]
+	jest pokryciem wierzchołkowym. Gdyby krawędź $ab$, gdzie $a\in A$ i
+	$b\in B$, nie miała końca w $C$, mielibyśmy $a\in Z$ i $b\notin Z$.
+	Krawędź spoza $M$ pozwoliłaby dojść z $a$ do $b$, a jeżeli $ab\in M$, to
+	$b$ musiał już wystąpić na ścieżce naprzemiennej prowadzącej do $a$.
+	W obu przypadkach otrzymujemy sprzeczność.
+
+	Żaden osiągnięty wierzchołek $B$ nie jest wolny, bo wtedy znaleźlibyśmy
+	ścieżkę powiększającą $M$. Każda krawędź $M$ ma dokładnie jeden koniec w
+	$C$: koniec w $B$, gdy oba końce należą do $Z$, oraz koniec w $A$, gdy żaden
+	nie należy do $Z$. Stąd $|C|=|M|$. Każde pokrycie musi zawierać co najmniej
+	jeden koniec każdej krawędzi skojarzenia, więc ma rozmiar co najmniej
+	$|M|$. Otrzymujemy $\tau(G)=\nu(G)$. Ponieważ dopełnienie pokrycia
+	wierzchołkowego jest zbiorem niezależnym i odwrotnie,
+	$\alpha(G)+\tau(G)=n$, co daje również $\alpha(G)+\nu(G)=n$.
+\end{theoryproof}
+
+\subsection{Planarność: wzór Eulera i nierówności}
+
+Jeżeli spójny graf płaski ma $n$ wierzchołków, $m$ krawędzi i $f$ ścian, to
+\[
+	n-m+f=2.
+\]
+Jeżeli każda ściana ma brzeg długości co najmniej $q$, to z podwójnego
+zliczenia krawędzi na brzegach ścian otrzymujemy
+\[
+	qf\leqslant2m,
+	\qquad
+	m\leqslant\frac{q}{q-2}(n-2).
+\]
+W szczególności dla prostego grafu planarnego o $n\geqslant3$ mamy
+\[
+	m\leqslant3n-6,
+\]
+a jeżeli graf jest dodatkowo dwudzielny, to
+\[
+	m\leqslant2n-4.
+\]
+Pierwsza z tych nierówności razem z $\sum_vd(v)=2m$ daje przydatny zapis
+\[
+	\sum_{v\in V(G)}(6-d(v))=6n-2m\geqslant12.
+\]
+
+\begin{theoryproof}
+	Najpierw liczymy na dwa sposoby pary $(F,e)$, w których $e$ jest bokiem
+	brzegu ściany $F$. Każda krawędź ma dwie strony, więc pojawia się w tym
+	zliczeniu dwa razy; dla mostu obie strony należą do tej samej ściany. Zatem
+	\[
+		\sum_F\ell(F)=2m.
+	\]
+	Jeżeli każdy brzeg ma długość co najmniej $q$, to
+	\[
+		qf\leqslant\sum_F\ell(F)=2m.
+	\]
+	Ze wzoru Eulera mamy $f=2-n+m$. Po podstawieniu
+	\[
+		q(2-n+m)\leqslant2m,
+	\]
+	czyli
+	\[
+		(q-2)m\leqslant q(n-2).
+	\]
+	Stąd $m\leqslant q(n-2)/(q-2)$. Dla grafu prostego przyjmujemy $q=3$, a
+	dla grafu prostego i dwudzielnego $q=4$.
+
+	Podobnie podwójnie liczymy pary $(v,e)$, w których $v$ jest końcem krawędzi
+	$e$. Każda krawędź ma dwa końce, więc
+	\[
+		\sum_vd(v)=2m.
+	\]
+	Z nierówności $m\leqslant3n-6$ otrzymujemy
+	\[
+		\sum_v(6-d(v))=6n-2m\geqslant12.
+	\]
+\end{theoryproof}
+
+\subsection{Lokalizacja klik}
+
+Przy zliczaniu klik warto przechodzić do grafów indukowanych przez
+sąsiedztwa. Jeśli $t_k(G)$ oznacza liczbę klik $K_k$ w $G$, to
+\[
+	\sum_{v\in V(G)}t_{k-1}(G[N(v)])=k\,t_k(G).
+\]
+Tożsamość zachowuje dokładne stałe i dobrze współpracuje z Cauchym oraz z
+oszacowaniami ekstremalnymi.
+
+\begin{theoryproof}
+	Liczymy na dwa sposoby pary $(v,Q)$, gdzie $Q$ jest kliką $K_k$, a
+	$v\in V(Q)$ jest jednym z jej wyróżnionych wierzchołków. Każda klika $Q$
+	daje dokładnie $k$ par, więc liczba par wynosi $k\,t_k(G)$.
+
+	Z drugiej strony ustalmy $v$. Po usunięciu $v$ z kliki $Q$ pozostaje klika
+	$K_{k-1}$ złożona z sąsiadów $v$, czyli zawarta w $G[N(v)]$. Każda taka
+	klika wraz z $v$ daje dokładnie jedną klikę $K_k$. Dla ustalonego $v$ mamy
+	więc $t_{k-1}(G[N(v)])$ par. Po zsumowaniu po wszystkich $v$ otrzymujemy
+	lewą stronę dowodzonej tożsamości.
+\end{theoryproof}
+
+\newpage
+\section{Zadania}
+
+\begin{zadanie}{łatwe} % reformulacja ELMO Shortlist 2011 C7
+	Niech $t\geqslant1$. Udowodnij, że każdy graf $G$ spełniający
+	\[
+		\operatorname{avgdeg}(G)\geqslant2(t-1)
+	\]
+	zawiera jako podgraf każde drzewo o $t$ wierzchołkach.
+\end{zadanie}
+
+\begin{solutionbox}
+	Niech $n=|V(G)|$ i $m=|E(G)|$. Z założenia
+	\[
+		m=\frac{n\operatorname{avgdeg}(G)}2\geqslant(t-1)n.
+	\]
+	Lemat o rdzeniu daje niepusty podgraf $H\subseteq G$ o
+	$\delta(H)\geqslant t-1$.
+
+	Pokażemy indukcyjnie po $t$, że taki graf $H$ zawiera każde drzewo $T$ na
+	$t$ wierzchołkach. Dla $t=1$ jest to oczywiste. Dla $t\geqslant2$ usuwamy
+	z $T$ liść $x$ i oznaczamy jego sąsiada przez $y$. Z założenia indukcyjnego
+	osadzamy $T-x$ w $H$. Obraz wierzchołka $y$ ma co najmniej $t-1$ sąsiadów,
+	a spośród nich najwyżej $t-2$ zostało już użytych. Istnieje więc wolny
+	sąsiad, w którym umieszczamy $x$. Otrzymujemy kopię całego $T$ w $G$.
+\end{solutionbox}
+
+\begin{zadanie}{rozgrzewka} % turnieje; dwa zastosowania ekstremum
+	Turniej to orientacja grafu pełnego. Udowodnij, że:
+	\begin{enumerate}
+		\item w każdym turnieju istnieje wierzchołek, z którego do każdego innego
+		można dojść ścieżką skierowaną długości co najwyżej $2$;
+		\item jeżeli turniej zawiera cykl skierowany, to zawiera skierowany
+		trójkąt.
+	\end{enumerate}
+\end{zadanie}
+
+\begin{solutionbox}
+	W pierwszej części wybierzmy wierzchołek $v$ o największym stopniu
+	wyjściowym. Jeśli $v$ nie prowadzi bezpośrednio do $u$, to $u\to v$.
+	Gdyby nie istniał wierzchołek $w$ taki, że $v\to w\to u$, wierzchołek $u$
+	prowadziłby do $v$ i do każdego wychodzącego sąsiada $v$. Miałby więc
+	stopień wyjściowy większy od stopnia $v$, sprzecznie z wyborem $v$.
+
+	W drugiej części wybierzmy najkrótszy cykl skierowany
+	$v_1\to v_2\to\dots\to v_m\to v_1$. Jeśli $m>3$, rozpatrzmy krawędź
+	między $v_1$ i $v_3$. Kierunek $v_3\to v_1$ daje skierowany trójkąt, a
+	kierunek $v_1\to v_3$ daje krótszy cykl. Obie możliwości przeczą
+	minimalności $m$, zatem $m=3$.
+\end{solutionbox}
+
+
+
+
+\begin{zadanie}{łatwe} % Vietnam TST 2001
+	Klub ma $42$ członków. W każdym zbiorze $31$ członków istnieją chłopak i
+	dziewczyna, którzy się znają. Udowodnij, że można utworzyć $12$ rozłącznych
+	par chłopak--dziewczyna, w których osoby się znają.
+\end{zadanie}
+
+\begin{solutionbox}
+	Tworzymy graf dwudzielny: po lewej są chłopcy, po prawej dziewczęta, a
+	krawędź oznacza znajomość. Warunek mówi, że każdy zbiór niezależny ma co
+	najwyżej $30$ wierzchołków, czyli $\alpha(G)\leqslant30$.
+
+	Z twierdzenia Kőniga
+	\[
+		\nu(G)=|V(G)|-\alpha(G)\geqslant42-30=12.
+	\]
+	Istnieje więc skojarzenie złożone z co najmniej $12$ krawędzi, a wybrane
+	krawędzie są żądanymi parami.
+\end{solutionbox}
+
+\begin{zadanie}{łatwe} % MOP 2008
+	Niech $n\geqslant3$. Krawędzie grafu pełnego $K_n$ pokolorowano tak, że żaden kolor nie został
+	użyty na więcej niż $n-2$ krawędziach. Udowodnij, że istnieje trójkąt,
+	którego trzy krawędzie mają trzy różne kolory.
+\end{zadanie}
+
+\begin{solutionbox}
+	Załóżmy przeciwnie. Wybierzmy największą spójną składową utworzoną przez
+	krawędzie jednego koloru; nazwijmy ją $X$, a jej kolor czerwonym.
+
+	Gdyby $v\notin X$, to dla dowolnej czerwonej krawędzi $xy$ w $X$ krawędzie
+	$vx$ i $vy$ nie mogą być czerwone. Nie mogą też mieć różnych kolorów, bo
+	$vxy$ byłby tęczowym trójkątem. Mają więc ten sam kolor. Idąc po czerwonych
+	ścieżkach w $X$, widzimy, że wszystkie krawędzie z $v$ do $X$ mają jeden
+	kolor. Wtedy $X\cup\{v\}$ leży w większej jednokolorowej składowej, co
+	przeczy wyborowi $X$. Zatem $X$ zawiera wszystkie $n$ wierzchołków.
+
+	Spójny graf na $n$ wierzchołkach ma co najmniej $n-1$ krawędzi. Kolor
+	czerwony wystąpił więc co najmniej $n-1$ razy, wbrew założeniu.
+\end{solutionbox}
+
+\begin{zadanie}{średnie} % krzywizna Eulera; trening finałowy
+	Niech $G$ będzie prostym, spójnym grafem planarnym o minimalnym stopniu co
+	najmniej $5$. Udowodnij, że $G$ ma co najmniej $12$ wierzchołków stopnia
+	dokładnie $5$. Wykaż ponadto, że jeżeli takich wierzchołków jest dokładnie
+	$12$, to każda ściana dowolnego rysunku płaskiego $G$ jest trójkątem, a
+	każdy pozostały wierzchołek ma stopień $6$.
+\end{zadanie}
+
+\begin{solutionbox}
+	Oznaczmy przez $n,m,f$ liczby wierzchołków, krawędzi i ścian $G$. Ze wzoru
+	Eulera i nierówności $3f\leqslant2m$ mamy $m\leqslant3n-6$. Zatem
+	\[
+		\sum_{v\in V(G)}(6-d(v))=6n-2m\geqslant12. \tag{1}
+	\]
+
+	Niech $x$ oznacza liczbę wierzchołków stopnia $5$. Ponieważ wszystkie
+	stopnie są co najmniej $5$, lewa strona (1) jest równa
+	\[
+		x-\sum_{d(v)\geqslant7}(d(v)-6)\leqslant x.
+	\]
+	Stąd $x\geqslant12$.
+
+	Jeżeli $x=12$, wszystkie nierówności muszą być równościami. Nie ma więc
+	wierzchołka stopnia większego niż $6$, a każdy wierzchołek inny niż
+	wyróżnione dwanaście ma stopień $6$. Ponadto $m=3n-6$. Ze wzoru Eulera
+	$f=2n-4$, czyli $3f=2m$. Ponieważ każda ściana ma długość co najmniej $3$,
+	równość ta oznacza, że wszystkie ściany są trójkątami.
+\end{solutionbox}
+
+\begin{zadanie}{średnie} % Croatian TST 2011
+	Na przyjęciu jest $n$ osób. Wśród dowolnych czterech osób istnieją albo
+	trzy parami zaprzyjaźnione, albo trzy parami nieznające się. Udowodnij, że
+	uczestników można rozdzielić na zbiory $A,B$ tak, aby $A$ był kliką, a $B$
+	zbiorem niezależnym.
+\end{zadanie}
+
+\begin{solutionbox}
+	Niech $A$ będzie największą kliką, a $B=V(G)\setminus A$. Wystarczy dowieść,
+	że $B$ jest niezależny. Przypuśćmy więc, że $v_1v_2$ jest krawędzią w $B$.
+	Ponieważ $A$ jest maksymalna, istnieje $u_1\in A$ niepołączony z $v_1$.
+
+	Jeśli $u_1$ nie jest połączony także z $v_2$, to dla każdego
+	$u\in A\setminus\{u_1\}$ w czwórce $u,u_1,v_1,v_2$ nie może być niezależnej
+	trójki: są w niej dwie rozłączne krawędzie $uu_1$ i $v_1v_2$. Musi więc być
+	trójkąt, a jedyną możliwością jest $uv_1v_2$. Wtedy
+	$(A\setminus\{u_1\})\cup\{v_1,v_2\}$ jest większą kliką.
+
+	Jeśli $u_1v_2$ jest krawędzią, to dla każdego $u\in A\setminus\{u_1\}$ ta sama czwórka nie
+	zawiera niezależnej trójki, a każdy możliwy trójkąt wymusza krawędź
+	$uv_2$. Zatem $v_2$ łączy się ze wszystkimi w $A$, więc $A\cup\{v_2\}$ jest
+	większą kliką. Oba przypadki dają sprzeczność.
+\end{solutionbox}
+
+\begin{zadanie}{średnie} % AoPS handout, ćw. 29; uogólnienie zadania Rosja 2001
+	Drzewo ma dokładnie $2n$ liści, gdzie $n\geqslant2$. Dodaj do niego $n$
+	krawędzi tak, aby po usunięciu dowolnej krawędzi otrzymany graf nadal był
+	spójny.
+\end{zadanie}
+
+\begin{solutionbox}
+	Ukorzeńmy drzewo w wierzchołku stopnia co najmniej $2$ i wypiszmy liście
+	$\ell_1,\ell_2,\dots,\ell_{2n}$ w kolejności DFS. Dodajmy krawędzie
+	\[
+		\ell_i\ell_{i+n}\qquad(1\leqslant i\leqslant n).
+	\]
+	Usunięcie jednej z nowych krawędzi nie rozspaja grafu, bo pozostaje całe
+	początkowe drzewo.
+
+	Rozważmy starą krawędź $e$. Po jej usunięciu jedna ze składowych jest
+	poddrzewem ukorzenionym, więc jej liście tworzą niepusty przedział $I$ w
+	cyklicznym porządku DFS. Jest to przedział właściwy, ponieważ po obu stronach
+	$e$ leży liść początkowego drzewa. Pokażemy, że któraś z dodanych krawędzi
+	przecina ten podział.
+
+	Jeżeli $|I|\leqslant n$, wybierzmy liść $\ell_i\in I$. Liść położony
+	naprzeciwko niego, czyli przesunięty cyklicznie o $n$ pozycji, nie należy do
+	$I$ i jest połączony z $\ell_i$. Jeżeli $|I|>n$, stosujemy to samo
+	rozumowanie do przedziału dopełniającego, który ma mniej niż $n$ elementów.
+	Zatem pewna krawędź $\ell_i\ell_{i+n}$ łączy obie składowe drzewa bez $e$,
+	więc również usunięcie starej krawędzi nie rozspaja grafu.
+\end{solutionbox}
+
+\begin{zadanie}{średnie} % Polska 1997; graf ukryty w geometrii
+	Na okręgu jednostkowym leży $n$ punktów. Udowodnij, że co najwyżej
+	$n^2/3$ par tych punktów jest odległych o więcej niż $\sqrt2$.
+\end{zadanie}
+
+\begin{solutionbox}
+	Połączmy dwa punkty krawędzią, gdy ich odległość jest większa niż $\sqrt2$.
+	Graf nie zawiera $K_4$. Istotnie, ustawmy cztery punkty w kolejności na
+	okręgu. Gdyby każda para była połączona, to także każda z czterech par
+	kolejnych punktów miałaby cięciwę dłuższą niż $\sqrt2$, a więc odpowiadający
+	jej mniejszy kąt środkowy byłby większy niż $90^\circ$. Suma czterech luk
+	kątowych byłaby wtedy większa niż $360^\circ$, sprzeczność.
+
+	Pozostaje użyć następującego szczególnego przypadku twierdzenia Turána:
+	graf bez $K_4$ na $n$ wierzchołkach ma co najwyżej $n^2/3$ krawędzi.
+	Udowodnimy go indukcyjnie. Jeśli graf nie ma trójkąta i ma $m$ krawędzi,
+	to dla każdej krawędzi $uv$ zachodzi $d(u)+d(v)\leqslant n$. Sumując po
+	krawędziach i używając nierówności Cauchy'ego, otrzymujemy
+	\[
+		\frac{4m^2}{n}\leqslant\sum_v d(v)^2
+		=\sum_{uv\in E(G)}(d(u)+d(v))\leqslant nm,
+	\]
+	czyli $m\leqslant n^2/4$. Jeśli zaś istnieje trójkąt, to każdy z pozostałych
+	wierzchołków ma w nim co najwyżej dwóch sąsiadów. Po usunięciu trzech
+	wierzchołków trójkąta i zastosowaniu indukcji liczba krawędzi jest nie
+	większa niż
+	\[
+		\frac{(n-3)^2}{3}+3+2(n-3)=\frac{n^2}{3}.
+	\]
+	Żądane pary są krawędziami skonstruowanego grafu, więc teza wynika z tego
+	oszacowania.
+\end{solutionbox}
+
+\begin{zadanie}{trudne} % IMO Shortlist 2004 C3
+	Na grafie skończonym wolno wykonać następujący ruch: wybrać cykl długości
+	$4$ i usunąć jedną z jego krawędzi. Dla $n\geqslant4$ wyznacz najmniejszą
+	liczbę krawędzi, z którą można zakończyć, startując z grafu pełnego $K_n$.
+\end{zadanie}
+
+\begin{solutionbox}
+	Każda usuwana krawędź leży na cyklu, więc jej usunięcie nie rozspaja grafu.
+	Ponadto graf nigdy nie staje się dwudzielny. Istotnie, przypuśćmy, że po
+	pierwszym takim ruchu graf jest dwudzielny, a usunęliśmy krawędź $AB$ z
+	cyklu $ABCD$. W pozostałym grafie istnieje ścieżka
+	$A-D-C-B$ długości $3$, więc $A$ i $B$ leżą w przeciwnych częściach.
+	Dołożenie $AB$ zachowałoby dwudzielność, sprzecznie z wyborem pierwszego
+	takiego ruchu.
+
+	Graf końcowy jest więc spójny i niedwudzielny. Spójny graf na $n$
+	wierzchołkach z $n-1$ krawędziami jest drzewem, a zatem jest dwudzielny.
+	Muszą pozostać co najmniej $n$ krawędzi.
+
+	Pokażemy konstrukcję osiągającą $n$. Oznaczmy wierzchołki przez
+	$v_1,\dots,v_n$. Najpierw, dla $3\leqslant i<j<n$, usuwamy $v_iv_j$ z
+	czworokąta $v_2v_iv_jv_n$. Następnie dla $3\leqslant i<n$ usuwamy
+	$v_2v_i$ z cyklu $v_1v_2v_iv_n$ i $v_iv_n$ z cyklu
+	$v_1v_iv_nv_2$. Zostają dokładnie krawędzie
+	\[
+		v_1v_i\quad(2\leqslant i\leqslant n)
+		\qquad\text{oraz}\qquad v_2v_n,
+	\]
+	czyli $n$ krawędzi.
+\end{solutionbox}
+
+\begin{zadanie}{trudne} % IMO Shortlist 2002 C6
+	Niech $n$ będzie dodatnią liczbą parzystą. Udowodnij, że istnieje permutacja
+	$(x_1,\dots,x_n)$ liczb $1,\dots,n$ taka, że dla każdego $i$ (indeksy
+	cykliczne) liczba $x_{i+1}$ należy do zbioru
+	\[
+		\{2x_i,\ 2x_i-1,\ 2x_i-n,\ 2x_i-n-1\}.
+	\]
+\end{zadanie}
+
+\begin{solutionbox}
+	Napiszmy $n=2m$. Budujemy skierowany multigraf o wierzchołkach
+	$1,\dots,m$ i krawędziach oznaczonych liczbami $1,\dots,2m$. Krawędź o
+	numerze $j$ wychodzi z wierzchołka $\lceil j/2\rceil$ i wchodzi do
+	wierzchołka przystającego do $j$ modulo $m$ (z reprezentantem w
+	$\{1,\dots,m\}$).
+
+	Z każdego wierzchołka $r$ wychodzą krawędzie $2r-1,2r$, a wchodzą
+	krawędzie $r,r+m$. Stopnie wejściowe i wyjściowe są więc równe $2$.
+	Graf jest słabo spójny: indukcyjnie można dojść z $1$ do każdego
+	$k\leqslant m$, bo do $k$ prowadzi krawędź wychodząca z
+	$\lceil k/2\rceil<k$. Istnieje zatem skierowany obwód Eulera.
+
+	Niech $x_1,\dots,x_n$ będą kolejnymi numerami krawędzi na tym obwodzie.
+	Jeśli krawędź $x_i$ wchodzi do $r$, to $x_i=r$ albo $r+m$, a następna
+	krawędź ma numer $2r$ albo $2r-1$. Po wyeliminowaniu $r$ dostajemy dokładnie
+	cztery możliwości z treści zadania.
+\end{solutionbox}
+
+% \begin{zadanie}{trudne} % USA TST 2002
+% Niech $S$ będzie zbiorem $2^n+1$ elementów, a
+% \[
+%   f:\binom{S}{2}\longrightarrow\{0,1,\dots,2^{n-1}-1\}.
+% \]
+% Załóżmy, że dla każdych trzech różnych $x,y,z\in S$ jedna z liczb
+% \[
+%   f(\{x,y\}),\quad f(\{y,z\}),\quad f(\{z,x\})
+% \]
+% jest sumą dwóch pozostałych. Udowodnij, że istnieją różne $a,b,c\in S$
+% takie, że wszystkie trzy wartości na parach z $\{a,b,c\}$ są równe zero.
+% \end{zadanie}
+
+% \begin{solutionbox}
+% Prowadzimy indukcję po $n$. Dla $n=1$ wszystkie wartości należą do
+% $\{0\}$, więc teza jest oczywista.
+
+% Budujemy graf na $S$, łącząc $x$ i $y$ wtedy i tylko wtedy, gdy
+% $f(\{x,y\})$ jest nieparzyste. W każdym trójkącie grafu liczba krawędzi jest
+% parzysta: jeśli jedna z trzech wartości jest sumą pozostałych, to suma
+% wszystkich trzech wartości jest parzysta. Każda trójka wierzchołków
+% wyznacza więc $0$ albo $2$ krawędzie.
+
+% Graf jest dwudzielny. Rzeczywiście, ustalmy wierzchołek $v$. Jego sąsiedzi
+% nie mogą mieć między sobą krawędzi, bo z $v$ powstałyby trzy krawędzie.
+% Jego niesąsiedzi także nie mogą mieć między sobą krawędzi, bo powstałaby
+% dokładnie jedna krawędź. Sąsiedzi i niesąsiedzi tworzą zatem dwie części.
+
+% Większa część $S'$ ma co najmniej
+% \[
+%   \left\lceil\frac{2^n+1}{2}\right\rceil=2^{n-1}+1
+% \]
+% elementów. Między jej elementami wszystkie wartości $f$ są parzyste.
+% Wybieramy dowolne $2^{n-1}+1$ elementów i definiujemy
+% \[
+%   g(\{x,y\})=\frac{f(\{x,y\})}{2}.
+% \]
+% Funkcja $g$ przyjmuje wartości w zbiorze
+% $\{0,\dots,2^{n-2}-1\}$ i spełnia ten sam warunek o trójkach. Z założenia
+% indukcyjnego istnieje trójka, na której wszystkie wartości $g$, a więc także
+% $f$, są zerowe.
+% \end{solutionbox}
+
+\begin{zadanie}{bardzo trudne} % IMO 1992, zadanie 3
+	Mamy $9$ punktów i wszystkie $36$ łączących je odcinków. Każdy odcinek
+	kolorujemy na czerwono, na niebiesko albo pozostawiamy bez koloru. Wyznacz
+	najmniejszą liczbę $m$ taką, że każde pokolorowanie dokładnie $m$ odcinków
+	wymusza monochromatyczny trójkąt.
+\end{zadanie}
+
+\begin{solutionbox}
+	Odpowiedzią jest $m=33$.
+
+	Najpierw pokażemy, że $33$ wystarcza. Pozostają wtedy tylko trzy
+	niepokolorowane krawędzie. Wybierając po jednym końcu każdej z nich i
+	usuwając wybrane wierzchołki, zostawiamy co najmniej sześć wierzchołków,
+	między którymi wszystkie krawędzie są pokolorowane. W każdym
+	dwukolorowaniu $K_6$ istnieje monochromatyczny trójkąt: z jednego
+	wierzchołka wychodzą co najmniej trzy krawędzie jednego koloru; albo któraś
+	krawędź między ich końcami ma ten sam kolor, albo wszystkie trzy mają kolor
+	przeciwny.
+
+	Pozostaje konstrukcja z $32$ krawędziami. Weźmy punkt $X$ oraz dwa
+	rozłączne czworokąty o zbiorach wierzchołków
+	\[
+		\{R_1,R_2,R_3,R_4\}
+		\qquad\text{i}\qquad
+		\{B_1,B_2,B_3,B_4\}.
+	\]
+	Boki pierwszego
+	czworokąta kolorujemy na czerwono, drugiego na niebiesko, a ich cztery
+	przekątne zostawiamy bez koloru. Krawędzie z $X$ do $R_i$ kolorujemy na
+	niebiesko, a z $X$ do $B_i$ na czerwono. Wreszcie krawędź $R_iB_j$
+	kolorujemy na czerwono, gdy $i,j$ mają tę samą parzystość, i na niebiesko w
+	przeciwnym razie.
+
+	Sprawdźmy trójkąty. Wewnątrz jednego czworokąta każdy trójkąt używa
+	niepokolorowanej przekątnej. Trójkąt zawierający $X$ albo ma dwa boki
+	różnych kolorów, albo także używa przekątnej. W trójkącie $R_iR_jB_k$,
+	gdy $i,j$ mają tę samą parzystość, krawędź $R_iR_j$ jest przekątną; gdy
+	mają różną parzystość, krawędzie $R_iB_k$ i $R_jB_k$ mają różne kolory.
+	Analogicznie jest dla trójkątów $B_iB_jR_k$. Żaden trójkąt nie jest więc
+	monochromatyczny, a pokolorowaliśmy $36-4=32$ krawędzie.
+\end{solutionbox}
+
+\begin{zadanie}{bardzo trudne} % AoPS handout, ćw. 20; IMO Shortlist 2013 C6
+W pewnym kraju niektóre pary miast są połączone bezpośrednimi lotami w obie
+strony. Z każdego miasta można dotrzeć do każdego innego. Wiadomo, że dla
+dowolnego miasta istnieje co najwyżej $100$ miast odległych od niego
+dokładnie o $3$ loty. Udowodnij, że od żadnego miasta nie może być więcej
+niż $2550$ miast odległych dokładnie o $4$ loty.
+\end{zadanie}
+
+\begin{solutionbox}
+Niech $S_i(v)=\{w:d(v,w)=i\}$. Przypuśćmy przeciwnie, że dla pewnego $x$
+zbiór $D=S_4(x)$ ma co najmniej $2551$ elementów, i oznaczmy $A=S_1(x)$.
+Wybierzmy najmniejszy zbiór $A^*\subseteq A$ taki, że
+\[
+  D\subseteq\bigcup_{a\in A^*}S_3(a),
+\]
+i połóżmy $m=|A^*|$. Ponieważ $m(101-m)\leqslant50\cdot51=2550$, istnieje
+$a\in A^*$, dla którego
+\[
+  |S_3(a)\cap D|\geqslant102-m.
+\]
+Istotnie, w przeciwnym razie wszystkie $m$ zbiorów pokrywałyby łącznie co
+najwyżej $m(101-m)$ elementów $D$.
+
+Zbiór $S_3(a)$ ma najwyżej $100$ elementów. Zatem zbiór
+\[
+  T=\{c\in S_3(a):d(x,c)\leqslant3\}
+\]
+ma co najwyżej $m-2$ elementów. Wyprodukujemy w nim jednak $m-1$ różnych
+wierzchołków.
+
+Dla każdego $y\in A^*\setminus\{a\}$ minimalność $A^*$ daje miasto
+$d_y\in D$, do którego żadna czterolotowa droga z $x$ nie przechodzi przez
+wierzchołek z $A^*\setminus\{y\}$. Ustalmy najkrótszą drogę
+\[
+  x-y-b_y-c_y-d_y.
+\]
+Wszystkie wierzchołki $b_y,c_y$ są parami różne: równość dwóch
+$b$ albo dwóch $c$ pozwoliłaby dojść do odpowiedniego $d_y$ przez inny
+element $A^*$, a $b$ nie może być równy $c$, bo leżą w różnych warstwach
+BFS od $x$.
+
+Mamy $d(a,y)\leqslant2$. Z drugiej strony $d(a,d_y)\geqslant3$, a równość
+nie zachodzi z wyboru $d_y$, więc $d(a,d_y)>3$. Wzdłuż ścieżki
+$y-b_y-c_y-d_y$ odległość od $a$ zmienia się o co najwyżej $1$. Dlatego
+jedno z miast $b_y,c_y$ leży w $S_3(a)$, a zarazem w odległości co najwyżej
+$3$ od $x$, czyli należy do $T$. Dla różnych $y$ dostajemy różne miasta.
+Stąd $|T|\geqslant m-1$, sprzecznie z $|T|\leqslant m-2$.
+\end{solutionbox}
+
+\begin{zadanie}{bardzo trudne} % AoPS handout, ćw. 21; IMO Shortlist 2004 C8
+Dla skończonego grafu $G$ niech $f(G)$ oznacza liczbę trójkątów, a $g(G)$
+liczbę podgrafów $K_4$. Wyznacz najmniejszą stałą $c$, dla której
+\[
+  g(G)^3\leqslant c\,f(G)^4
+\]
+dla każdego grafu $G$.
+\end{zadanie}
+
+\begin{solutionbox}
+Odpowiedzią jest $c=3/32$. Najpierw udowodnimy nierówność pomocniczą. Jeśli
+graf $H$ ma $E$ krawędzi i $F$ trójkątów, to
+\[
+  F^2\leqslant\frac{2E^3}{9}. \tag{1}
+\]
+Dla wierzchołka $v_i$ oznaczmy przez $v_i'$ liczbę jego sąsiadów, a przez
+$e_i$ liczbę krawędzi między tymi sąsiadami. Wówczas
+\[
+  e_i\leqslant\frac{(v_i')^2}{2},\qquad e_i\leqslant E,
+  \qquad\text{więc}\qquad e_i\leqslant v_i'\sqrt{E/2}.
+\]
+Ponieważ $\sum_i v_i'=2E$ i $\sum_i e_i=3F$, po zsumowaniu i podniesieniu
+do kwadratu otrzymujemy (1).
+
+Wróćmy do $G$. Niech $G_i$ będzie grafem indukowanym przez sąsiadów
+wierzchołka $v_i$, niech $e_i=|E(G_i)|$ i $t_i=f(G_i)$. Mamy
+\[
+  \sum_i e_i=3f(G),\qquad \sum_i t_i=4g(G).
+\]
+Zastosowanie (1) do $G_i$ oraz oczywistego $t_i\leqslant f(G)$ daje
+\[
+  t_i=t_i^{1/3}t_i^{2/3}
+  \leqslant f(G)^{1/3}\left(\frac29\right)^{1/3}e_i.
+\]
+Sumując po $i$, dostajemy
+\[
+  4g(G)\leqslant3\left(\frac29\right)^{1/3}f(G)^{4/3},
+\]
+co po podniesieniu do trzeciej potęgi daje
+$g(G)^3\leqslant\frac3{32}f(G)^4$.
+
+Stałej nie można zmniejszyć: dla grafów pełnych
+\[
+  \frac{g(K_N)^3}{f(K_N)^4}
+  =\frac{\binom{N}{4}^3}{\binom{N}{3}^4}
+  \longrightarrow\frac3{32}.
+\]
+\end{solutionbox}
+\ifshowsolutions
+\newpage
+\section{Rozwiązania}
+\drukujrozwiazania
+\fi
+
+\end{document}

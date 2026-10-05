@@ -1,0 +1,22 @@
+% Dane wspólne dla wszystkich materiałów. Pola można nadpisać w pliku .tex.
+\def\event{V WM 2026}
+\def\camp{V Warsztaty Matematyczne}
+\def\place{Poręba Wielka}
+\def\data{25.09 -- 4.10.2026}
+\def\author{}
+\def\lecturer{}
+
+\newcommand{\headlogo}{%
+	\includesvg[width=2.5cm]{\GRAPHICS graphics/WM/logotyp-WM-druk-5px}%
+}
+\newcommand{\footerlogos}{%
+	\begin{minipage}[c]{0.47\linewidth}
+		\href{https://patronite.pl/kuznia}{%
+			\raisebox{-0.15em}{\includesvg[height=0.35cm]{\GRAPHICS graphics/patronite/patronite-sygnet-SVG-01}}%
+			\hspace{0.35em}\textcolor{blue}{\textit{patronite.pl/kuznia}}%
+		}%
+	\end{minipage}%
+	\begin{minipage}[c]{0.53\linewidth}
+		\raggedleft\includegraphics[width=4cm]{\GRAPHICS graphics/sponsorzy/JaneStreet/jane_street}%
+	\end{minipage}%
+}

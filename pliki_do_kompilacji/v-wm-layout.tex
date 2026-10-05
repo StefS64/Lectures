@@ -1,0 +1,22 @@
+% Proporcje i rozmiary historycznej stopki; wspólne wyrównanie górne kolumn.
+% Kod stopki w common-template.cls pozostaje oryginalny.
+\geometry{left=2cm,right=2cm,top=4.2cm,bottom=3cm,headheight=78pt,headsep=24pt,footskip=28pt}
+\hypersetup{hidelinks}
+\urlstyle{same}
+\fancyfoot[C]{%
+	\hrule
+	\makebox[\textwidth][l]{%
+		\begin{minipage}[t]{0.45\textwidth}
+			\vspace{0pt}\small\setlength{\parskip}{0pt}\raggedright\footerlogos
+		\end{minipage}%
+		\begin{minipage}[t]{0.10\textwidth}
+			\vspace{0pt}\centering\Large\textit{\thepage/\pageref*{LastPage}}
+		\end{minipage}%
+		\begin{minipage}[t]{0.45\textwidth}
+			\vspace{0pt}\small\setlength{\parskip}{0pt}\raggedleft
+			\ifdefvoid{\title}{}{\title{}\\}%
+			\event{}\ifdefvoid{\group}{}{, \group{}}\\[1mm]
+			\copyrightKuznia
+		\end{minipage}%
+	}%
+}

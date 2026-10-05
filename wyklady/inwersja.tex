@@ -1,0 +1,84 @@
+\documentclass{lecture-kuznia}
+\usepackage{textcomp}
+
+\def\title{Inwersja}
+\def\data{27.09.2025}
+\def\place{Poręba Wielka}
+\def\group{Finaliści}
+\def\author{Autor: Stefan Świerczewski}
+\def\lecturer{Prowadzący: Stefan Świerczewski}
+
+
+\begin{document}
+\begin{center}{\Huge\textbf{\title{}}}\end{center}
+
+\section{Teoria}
+
+Inwersją nazywamy przekształcenie płaszczyzny względem okręgu $\omega$ przy zachowaniu następujących zasad:
+\begin{itemize}
+    \item Punkt $Y$ jest obrazem punktu $X$ wtedy, gdy punkty $X$ i $Y$ leżą na tej samej półprostej o początku w punkcie $O$ oraz zachodzi równość: 
+    \[
+    OX \cdot OY = R^2.
+    \]
+    Piszemy wtedy: $I_{O}^R(X) = Y$ lub prościej $I_{\omega}(X) = Y$.
+    \item Przybliżając punkt $X$ do punktu $O$ obraz tego punktu coraz bardziej przybliża się do \textit{nieskończoności}, zatem wprowadzamy nowy pojedynczy punkt który znajduje się w nieskończoności. Oznaczamy go jako $P_{\infty}$ przy czym: 
+    \[
+        I_{\omega}(P_{\infty}) = O \quad \text{oraz} \quad I_{\omega}(O) = P_{\infty}.
+    \]
+\end{itemize}
+	{Parę własności:}
+\begin{itemize}
+    \item Inwersja jest \textit{inwolucją}, czyli:  $I_{\omega}(I_{\omega}(X))=X$ dla dowolnego punktu (razem z $O$ i $P_{\infty}$).
+    \item Obrazy punktów należących  do okręgu inwersyjnego są sobą samym.
+    \item Obraz inwersyjny punktu $X$, leżącego na zewnątrz okręgu $\omega$ leży na prostej łączącej punkty styczności stycznych poprowadzonych z punktu $X$ do okręgu $\omega$ i vice versa.
+    \item Punkty $A,B,A',B'$ leżą na jednym okręgu gdzie: $I_{\omega}(A) = A'$ i  $I_{\omega}(B) = B'$
+    \item $A'B' = \frac{R^2}{OA \cdot OB} AB$
+    \item Prosta przechodząca przez środek okręgu $O$ w inwersji względem tego okręgu przechodzi na samą siebie.
+    \item Prosta w przestrzeni (nie przechodząca przez $O$) przechodzi na okrąg przechodzący przez $O$ środek okręgu inwersyjnego.
+    \item Obrazami okręgów które przechodzą przez $O$ są proste.
+    \item Inwersja zachowuje kąty. W szczególności okrąg prostopadły do inwersyjnego przechodzi na samego siebie.
+    \item Dla trójkąta $ABC$ inwersja względem punktu $A$ o promieniu $\sqrt{AB \cdot AC}$, złożona z odbiciem względem dwusiecznej kąta $\angle A$, zamienia miejscami punkty $B$ i $C$.
+\end{itemize}
+
+\section{Zadania}
+
+\begin{problem}
+Danych jest $n \geq 4$ punktów, przy czym żadne trzy nie leżą na na jednej prostej. Dowieść, że jeżeli okrąg przechodzący przez dowolne trzy z tych punktów przechodzi również przez czwarty, to wszystkie te punkty leżą na jednym okręgu. 
+\end{problem}
+
+\begin{problem}
+Skonstruuj nieskończony łańcuch Steinera, pomiędzy dwom stycznymi wewnętrznie okręgami.
+\end{problem}
+
+\begin{problem}
+Cztery różne okręgi $o_1, o_2, o_3, o_4$ są styczne wewnętrznie do okręgu $\omega$ odpowiednio w punktach $A,B,C,D$. Jeżeli okręgi $o_1, o_3$ są styczne zewnętrznie do obu okręgów $o_2, o_4$ oraz styczne do $\omega$ w punktach $C,A$ przecinają się w punkcie $F$. Udowodnij współliniowość punktów $F, B, D$.
+\end{problem}
+
+\begin{problem}
+W trójkącie $ABC$ dwusieczna kąta $BAC$ przecina bok $BC$ w punkcie $D$ oraz okrąg opisany $\Omega$ na trójkącie $ABC$ w punkcie $E$. Okrąg $\omega$ o średnicy $DE$ przecina $\Omega$ ponownie w punkcie $F$. Pokazać, że $AF$ jest symedianą trójkąta $ABC$.
+\end{problem}
+
+\begin{problem}
+Punkt $I$ jest środkiem okręgu wpisanego w trójkąt $ABC$ , zaś $\omega$ jest okręgiem opisanym na tym trójkącie. Okrąg styczny do odcinków $AB$, $AC$ jest styczny do okręgu $\omega$ w punkcie $P$, a $S$ jest środkiem tego łuku $BC$ okręgu $\omega$, na którym leży punkt $A$. Wykazać, że punkty $P$, $I$, $S$ są współliniowe.
+\end{problem}
+
+\begin{problem}
+Jeżeli siedem wierzchołków heksaedru (bryła o sześciu ścianach) leży na sferze, to ósmy wierzchołek również na niej leży.
+\end{problem}
+
+\begin{problem}
+Trapez $ABCD$ o podstawach $AD$ i $BC$ jest wpisany w okrąg $\omega_1$. Okrąg $\omega_2$ jest styczny do odcinków $AB$ i $AC$ oraz jest styczny wewnętrznie do okręgu $\omega_1$ w punkcie $F$. Okrąg wpisany do trójkąta $ABC$ jest styczny do odcinka $BC$ w punkcie $E$. Dowieść, że punkty $D, E, F$ leżą na jednej prostej.
+\end{problem}
+
+\begin{problem}
+Punkt $M$ leży na okręgu opisanym na trójkącie $ABC$. Styczne do okręgu wpisanego w trójkąt $ABC$ poprowadzone z punktu $M$ przecinają prostą $BC$ w punktach $X_1$ i $X_2$. Pokazać, że przy zmieniającym się wyborze punktu $M$, okręgi opisane na trójkątach $MX_1X_2$ mają punkt wspólny.
+\end{problem}
+
+\begin{problem}
+Trójkąt różnoboczny $ABC$ jest wpisany w okrąg $o$. Punkty $D$, $E$, $F$ są środkami łuków $BC$, $CA$, $AB$ niezawierających pozostałych wierzchołków trójkąta. Punkty $D'$, $E'$, $F'$ są symetryczne do punktów $D$, $E$, $F$ odpowiednio względem boków $BC$, $CA$, $AB$. Wykazać, że punkty $D'$, $E'$, $F'$ oraz ortocentrum trójkąta $ABC$ leżą na jednym okręgu.
+\end{problem}
+
+\begin{problem}
+Niech $ABC$ będzie trójkątem ostrokątnym. Okrąg wpisany styka się z bokiem $BC$ w punkcie $K$. Wysokość $AD$ ma środek $M$. Prosta $KM$ przecina ponownie okrąg wpisany w punkcie $N$. Udowodnij, że okrąg opisany na trójkącie $BCN$ jest styczny do okręgu wpisanego w trójkąt $ABC$ w punkcie $N$.
+\end{problem}
+\end{document}
