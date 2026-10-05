@@ -1,8 +1,7 @@
 # Wykłady Stefana Świerczewskiego
 
-Zebrane materiały wykładowe znalezione w lokalnej bazie warsztatów.
-Repozytorium jest samodzielne: zawiera źródła, klasy LaTeX, reguły budowania
-i potrzebne grafiki.
+Zebrane materiały wykładowe.
+
 
 ## Zawartość
 
